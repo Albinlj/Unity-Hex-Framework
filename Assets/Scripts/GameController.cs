@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class GameController : MonoBehaviour {
-    static GameController instance;
+    public static GameController instance;
 
     void Start() {
         if (instance != this) {

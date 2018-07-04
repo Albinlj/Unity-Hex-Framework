@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
     static CameraController instance;
-    static public Camera camera;
+    static public Camera myCamera;
 
 
 
@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void UpdateCamera(int width, int heigth) {
-        camera.orthographicSize = 1;
+        myCamera.orthographicSize = 1;
 
     }
 }

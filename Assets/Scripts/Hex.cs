@@ -5,12 +5,12 @@ using UnityEngine;
 public class Hex {
 
 
-    static public Vector3Int[] cubeDirections = new Vector3Int[] {
+    static public Vector3Int[] directions = new Vector3Int[] {
         new Vector3Int(1,0,-1),
         new Vector3Int(0,1,-1),
         new Vector3Int(-1,1,0),
         new Vector3Int(-1,0,1),
-         new Vector3Int(0,-1,1),
+        new Vector3Int(0,-1,1),
         new Vector3Int(1,-1,0)
         };
 
@@ -23,14 +23,14 @@ public class Hex {
     static public Vector3Int OffsetToCube(Vector2Int offsetCoord) {
         int x, y, z;
         x = offsetCoord.x;
-        y = offsetCoord.y - (offsetCoord.x - 1) % 2;
-        z = -offsetCoord.y - offsetCoord.x % 2;
+        y = offsetCoord.y - offsetCoord.x / 2;
+        z = -x - y;
         return new Vector3Int(x, y, z);
     }
     static public Vector2Int AxialToOffset(Vector2Int _axial) {
         int x, y;
-        x = _axial.x - _axial.y;
-        y = (_axial.y - 1) % 2;
+        x = _axial.x;
+        y = _axial.y + _axial.x / 2;
         return new Vector2Int(x, y);
     }
     static public Vector3Int AxialToCube(Vector2Int axialCoord) {
@@ -38,6 +38,9 @@ public class Hex {
     }
 
     static public Vector2Int CubeToOffset(Vector3Int _cube) {
+        int x, y;
+        x = _cube.x;
+        y = _cube.y + _cube.x / 2;
         return AxialToOffset(CubeToAxial(_cube));
     }
 
@@ -45,13 +48,26 @@ public class Hex {
         return new Vector2Int(_cube.x, _cube.y);
     }
 
-    //Returns Strut
-    static public Vector3Int[] getNeighbors(Vector3Int _cube) {
-        Vector3Int[] neighborCoords = new Vector3Int[6];
-        foreach (Vector3Int dir in cubeDirections) {
-            neighborCoords[Array.IndexOf(cubeDirections, dir)] = _cube + dir;
+
+    static public List<Vector3Int> Ring(Vector3Int _origin, int radius) {
+        List<Vector3Int> coordList = new List<Vector3Int>();
+        Vector3Int addCoord = _origin + Hex.directions[4] * radius;
+        for (int i = 0; i < 6; i++) {
+            for (int j = 0; j < radius; j++) {
+                coordList.Add(addCoord);
+                addCoord = addCoord + Hex.directions[i];
+            }
         }
-        return neighborCoords;
+        return coordList;
+    }
+
+    static public List<Vector3Int> Spiral(Vector3Int _origin, int radius) {
+        List<Vector3Int> coordList = new List<Vector3Int>();
+        coordList.Add(_origin);
+        for (int i = 1; i <= radius; i++) {
+            coordList.AddRange(Ring(_origin, i));
+        }
+        return coordList;
     }
 
 }

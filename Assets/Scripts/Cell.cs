@@ -4,64 +4,55 @@ using System.Linq;
 using UnityEngine;
 
 public class Cell : MonoBehaviour {
-    //private
-    [SerializeField]
-    private Vector2Int offsetCoord;
-    [SerializeField]
-    private Vector2Int axialCoord;
+
     [SerializeField]
     private Vector3Int cubeCoord;
+    [SerializeField]
+
     public GameObject coordUIPrefab;
-    private GameObject myCoordUI;
-
-
+    private PolygonCollider2D polyCollider;
+    private MapController mapController = MapController.instance;
     public Vector2Int OffsetCoord {
-        get { return offsetCoord; }
-        set { offsetCoord = value; }
+        get { return Hex.CubeToOffset(cubeCoord); }
+        private set { }
     }
     public Vector2Int AxialCoord {
-        get { return Hex.OffsetToAxial(offsetCoord); }
+        get { return Hex.CubeToAxial(cubeCoord); }
         private set { }
     }
     public Vector3Int CubeCoord {
-        get { return Hex.OffsetToCube(offsetCoord); }
+        get { return cubeCoord; }
         private set { }
     }
 
-    void UpdateCoords() {
-        axialCoord = AxialCoord;
-        cubeCoord = CubeCoord;
-    }
 
     private void Start() {
         InitializeUI();
+        polyCollider = gameObject.GetComponent<PolygonCollider2D>();
+        //neighbors = MapController.instance.GetNeighborCells(CubeCoord);
+    }
 
-        neighbors = GetNeighbors();
+    private void OnMouseDown() {
+        Debug.Log(CubeCoord);
+    }
+
+    public void Initialize(Vector2Int _offset) {
+        transform.name = "Cell [" + _offset.x + ", " + _offset.y + "]";
+        cubeCoord = Hex.OffsetToCube(_offset);
+        transform.position = Layout.offsetToWorld(_offset);
     }
 
     private void InitializeUI() {
         GameObject coordUI = Instantiate(coordUIPrefab, transform);
-        string[] letters = new string[] { "x", "y", "z" };
+
         for (int i = 0; i < 3; i++) {
             coordUI.transform.GetChild(i).gameObject.GetComponent<UnityEngine.UI.Text>().text = cubeCoord[i].ToString();
         }
     }
 
-    private Cell[] neighbors;
-
-    public Cell[] Neighbors {
-        get { return neighbors; }
-        private set { }
+    public Cell GetNeighbor(int _dir) {
+        return MapController.instance.GetCell(cubeCoord + Hex.directions[_dir]);
     }
 
-    private Cell[] GetNeighbors() {
-        //Cell[] cellNeighbors = Hex.getNeighbors(CubeCoord).Select(cubeNeighbor => )
-        //return cellNeighbors;
-        return new Cell[] { };
-    }
 
 }
-
-
-
-
