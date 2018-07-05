@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4513716308397788}
   - component: {fileID: 212015232959215138}
-  - component: {fileID: 60103668977495592}
   m_Layer: 0
   m_Name: Hexagon
   m_TagString: Untagged
@@ -72,36 +71,6 @@ Transform:
   m_Father: {fileID: 4058558532513926}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
---- !u!60 &60103668977495592
-PolygonCollider2D:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1953339212974902}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0, y: 0.5}
-      - {x: -0.43301272, y: 0.24999999}
-      - {x: -0.4330127, y: -0.25000003}
-      - {x: 0.00000004371139, y: -0.5}
-      - {x: 0.43301272, y: -0.24999996}
-      - {x: 0.43301272, y: 0.24999996}
 --- !u!60 &60487201363664552
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -126,12 +95,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.22222567, y: 0.39868367}
-      - {x: -0.20594692, y: 0.38744953}
-      - {x: -0.42838395, y: 0.024410963}
-      - {x: -0.23248303, y: -0.38278452}
-      - {x: 0.24791098, y: -0.39071}
-      - {x: 0.45431674, y: -0.004713118}
+    - - {x: -0.3849002, y: 0.22222222}
+      - {x: 0, y: 0.44444445}
+      - {x: 0.3849002, y: 0.22222216}
+      - {x: 0.3849002, y: -0.22222216}
+      - {x: 0.000000052981907, y: -0.44444445}
+      - {x: -0.38490018, y: -0.22222225}
 --- !u!114 &114604873972250186
 MonoBehaviour:
   m_ObjectHideFlags: 1

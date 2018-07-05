@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour {
-    static CameraController instance;
-    static public Camera myCamera;
-
+    public static CameraController instance;
+    public Camera myCamera;
+    public float padding;
 
 
     // Use this for initialization
@@ -23,8 +23,9 @@ public class CameraController : MonoBehaviour {
 
     }
 
-    public static void UpdateCamera(int width, int heigth) {
-        myCamera.orthographicSize = 1;
-
+    public void UpdateCamera(int width, int heigth) {
+        myCamera.transform.position = new Vector3((width - 1) * Layout.RadiusInner, (heigth - 0.5f) * Layout.RadiusInner, -1);
+        myCamera.orthographicSize = (heigth + 0.5f) * Layout.RadiusInner + padding;
+        myCamera.ResetAspect();
     }
 }

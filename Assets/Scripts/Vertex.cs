@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Vertex : MonoBehaviour {
-
+    Vector3Int cubeCoord;
     // Use this for initialization
     void Start() {
 
@@ -13,9 +13,10 @@ public class Vertex : MonoBehaviour {
     void Update() {
 
     }
-    public void Initialize(Vector2Int _offset, int _index) {
-        transform.name = "Vertex [" + _offset.x + ", " + _offset.y + "]";
-        transform.position = Layout.VertexOffsetToWorld(_offset, _index);
+    public void Initialize(Vector3Int _cube, int _index) {
+        transform.name = "Vertex [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
+        cubeCoord = _cube;
+        transform.position = Layout.CubeToWorld(cubeCoord) + new Vector2(0.5f - _index, 0);
     }
 
 }

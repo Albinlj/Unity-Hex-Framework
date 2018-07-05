@@ -61,11 +61,4 @@ class Layout {
     }
 
 
-    public static Vector2 BorderOffsetToWorld(Vector2Int _offset, int _index) {
-        return CellOffsetToWorld(_offset) + CubeToWorld(Hex.cellDirections[_index]) / 2;
-    }
-
-    public static Vector2 VertexOffsetToWorld(Vector2Int _offset, int _index) {
-        return CellOffsetToWorld(_offset) + new Vector2(0.5f - _index, 0);
-    }
 }

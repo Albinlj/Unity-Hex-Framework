@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Border : MonoBehaviour {
-
+    Vector3Int cubeCoord;
+    int directionIndex;
     // Use this for initialization
     void Start() {
 
@@ -14,10 +15,19 @@ public class Border : MonoBehaviour {
 
     }
 
-    public void Initialize(Vector2Int _offset, int _index) {
-        transform.name = "Border [" + _offset.x + ", " + _offset.y + "]";
-
-        transform.position = Layout.BorderOffsetToWorld(_offset, _index);
+    public void Initialize(Vector3Int _cube, int _index) {
+        cubeCoord = _cube;
+        transform.name = "Border [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
+        transform.position = Layout.CubeToWorld(cubeCoord) + Layout.CubeToWorld(Hex.cellDirections[_index]) / 2;
         transform.Rotate(new Vector3(0, 0, -60 + 60 * _index));
+        directionIndex = _index;
+    }
+
+    public bool NeighborCells() {
+        List<Cell> neighborList = new List<Cell>();
+        if (MapController.instance.isValidCoord(cubeCoord)) {
+            neighborList.Add(MapController.instance.GetCell(cubeCoord));
+        }
+        return true;
     }
 }

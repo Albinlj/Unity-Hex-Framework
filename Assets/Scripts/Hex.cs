@@ -46,9 +46,7 @@ public class Hex {
     }
 
     static public Vector2Int CellCubeToOffset(Vector3Int _cube) {
-        int x, y;
-        x = _cube.x;
-        y = _cube.y + _cube.x / 2;
+
         return CellAxialToOffset(CellCubeToAxial(_cube));
     }
 
@@ -78,5 +76,33 @@ public class Hex {
         return coordList;
     }
 
+    static public Vector3Int Neighbor(Vector3Int _cube, int _dir) {
+        return _cube + Hex.cellDirections[_dir];
+    }
 
+    static public List<Vector3Int> BorderCellNeighbors(Vector3Int _cube, int _dir) {
+        List<Vector3Int> cubeList = new List<Vector3Int>();
+        cubeList.Add(_cube);
+        cubeList.Add(Neighbor(_cube, _dir));
+        return cubeList;
+
+    }
+
+    static public List<Vector3Int> VertexCellNeighbors(Vector3Int _cube, int _dir) {
+        List<Vector3Int> cubeList = new List<Vector3Int>();
+        cubeList.Add(_cube);
+        switch (_dir) {
+            case 0:
+                cubeList.Add(_cube + cellDirections[0]);
+                cubeList.Add(_cube + cellDirections[5]);
+                break;
+            case 1:
+                cubeList.Add(_cube + cellDirections[2]);
+                cubeList.Add(_cube + cellDirections[3]);
+                break;
+            default:
+                break;
+        }
+        return cubeList;
+    }
 }

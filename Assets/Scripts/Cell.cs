@@ -26,7 +26,7 @@ public class Cell : MonoBehaviour {
 
 
     private void Start() {
-        InitializeUI();
+        //InitializeUI();
         polyCollider = gameObject.GetComponent<PolygonCollider2D>();
         //neighbors = MapController.instance.GetNeighborCells(CubeCoord);
     }
@@ -35,10 +35,10 @@ public class Cell : MonoBehaviour {
         Debug.Log(CubeCoord);
     }
 
-    public void Initialize(Vector2Int _offset) {
-        transform.name = "Cell [" + _offset.x + ", " + _offset.y + "]";
-        cubeCoord = Hex.CellOffsetToCube(_offset);
-        transform.position = Layout.CellOffsetToWorld(_offset);
+    public void Initialize(Vector3Int _cube) {
+        transform.name = "Cell [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
+        cubeCoord = _cube;
+        transform.position = Layout.CubeToWorld(_cube);
     }
 
     private void InitializeUI() {
@@ -49,8 +49,8 @@ public class Cell : MonoBehaviour {
         }
     }
 
-    public Cell GetNeighbor(int _dir) {
-        return MapController.instance.GetCell(cubeCoord + Hex.cellDirections[_dir]);
+    public Cell Neighbor(int _dir) {
+        return MapController.instance.GetCell(Hex.Neighbor(cubeCoord, _dir));
     }
 
 
