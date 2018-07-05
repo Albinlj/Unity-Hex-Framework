@@ -144,7 +144,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeCoord: {x: 0, y: 0, z: 0}
-  neighbors: []
   coordUIPrefab: {fileID: 1594506560030248, guid: dc32b69b153846a4e8eae634311f98f9,
     type: 2}
 --- !u!212 &212015232959215138

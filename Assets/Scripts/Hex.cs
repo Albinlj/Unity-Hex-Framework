@@ -70,4 +70,5 @@ public class Hex {
         return coordList;
     }
 
+
 }

@@ -7,7 +7,6 @@ public class Cell : MonoBehaviour {
 
     [SerializeField]
     private Vector3Int cubeCoord;
-    [SerializeField]
 
     public GameObject coordUIPrefab;
     private PolygonCollider2D polyCollider;
