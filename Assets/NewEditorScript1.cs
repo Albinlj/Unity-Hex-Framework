@@ -34,7 +34,9 @@ public class CellTester : EditorWindow {
             }
         }
 
-
+        if (GUILayout.Button("Move to Cubecoordinate 3, 1, -4")) {
+            Selection.activeGameObject.transform.position = Layout.CubeToWorld(new Vector3Int(3, 1, -4));
+        }
 
 
     }

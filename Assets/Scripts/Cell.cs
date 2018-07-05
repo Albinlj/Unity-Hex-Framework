@@ -12,11 +12,11 @@ public class Cell : MonoBehaviour {
     private PolygonCollider2D polyCollider;
     private MapController mapController = MapController.instance;
     public Vector2Int OffsetCoord {
-        get { return Hex.CubeToOffset(cubeCoord); }
+        get { return Hex.CellCubeToOffset(cubeCoord); }
         private set { }
     }
     public Vector2Int AxialCoord {
-        get { return Hex.CubeToAxial(cubeCoord); }
+        get { return Hex.CellCubeToAxial(cubeCoord); }
         private set { }
     }
     public Vector3Int CubeCoord {
@@ -37,8 +37,8 @@ public class Cell : MonoBehaviour {
 
     public void Initialize(Vector2Int _offset) {
         transform.name = "Cell [" + _offset.x + ", " + _offset.y + "]";
-        cubeCoord = Hex.OffsetToCube(_offset);
-        transform.position = Layout.offsetToWorld(_offset);
+        cubeCoord = Hex.CellOffsetToCube(_offset);
+        transform.position = Layout.CellOffsetToWorld(_offset);
     }
 
     private void InitializeUI() {
@@ -50,7 +50,7 @@ public class Cell : MonoBehaviour {
     }
 
     public Cell GetNeighbor(int _dir) {
-        return MapController.instance.GetCell(cubeCoord + Hex.directions[_dir]);
+        return MapController.instance.GetCell(cubeCoord + Hex.cellDirections[_dir]);
     }
 
 

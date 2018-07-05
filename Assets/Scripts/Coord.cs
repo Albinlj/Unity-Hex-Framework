@@ -13,13 +13,13 @@ struct Coord {
     //Offset Input
     public Coord(Vector2Int _offset) {
         offset = _offset;
-        axial = Hex.OffsetToAxial(_offset);
-        cube = Hex.OffsetToCube(_offset);
+        axial = Hex.CellOffsetToAxial(_offset);
+        cube = Hex.CellOffsetToCube(_offset);
     }
 
     public Coord(Vector3Int _cube) {
-        offset = Hex.CubeToOffset(_cube);
-        axial = Hex.CubeToAxial(_cube);
+        offset = Hex.CellCubeToOffset(_cube);
+        axial = Hex.CellCubeToAxial(_cube);
         cube = _cube;
     }
 

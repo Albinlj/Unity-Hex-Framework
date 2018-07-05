@@ -5,7 +5,6 @@ using System;
 
 public class MapController : MonoBehaviour {
     public static MapController instance;
-    public static int radius;
     public GameObject cellPrefab;
     public GameObject borderPrefab;
     public GameObject vertexPrefab;
@@ -14,8 +13,8 @@ public class MapController : MonoBehaviour {
     private GameObject vertexHolder;
 
     public Cell[,] cells;
-    private Border[,] borders;
-    private Vertex[,] vertices;
+    private Border[,][] borders;
+    private Vertex[,][] vertices;
     // Use this for initialization
     void Start() {
         if (instance != this) {
@@ -59,28 +58,33 @@ public class MapController : MonoBehaviour {
             }
         }
 
-        borders = new Border[_width * 2 + 1, _height * 2 + 1];
+        borders = new Border[_width + 2, _height + 2][];
+        vertices = new Vertex[_width + 2, _height + 2][];
         for (int x = 0; x < borders.GetLength(0); x++) {
             for (int y = 0; y < borders.GetLength(1); y++) {
-                GameObject newBorderObj = Instantiate(borderPrefab);
-                Border newBorder = newBorderObj.GetComponent<Border>();
-                newBorder.transform.SetParent(borderHolder.transform);
-                newBorder.Initialize(new Vector2Int(x, y));
-                borders[x, y] = newBorder;
+                Border[] newBorderArray = new Border[3];
+                for (int i = 0; i < 3; i++) {
+
+                    GameObject newBorderObj = Instantiate(borderPrefab);
+                    Border newBorder = newBorderObj.GetComponent<Border>();
+                    newBorder.transform.SetParent(borderHolder.transform);
+                    newBorder.Initialize(new Vector2Int(x - 1, y - 1), i);
+                    newBorderArray[i] = newBorder;
+                }
+                borders[x, y] = newBorderArray;
+
+                Vertex[] newVertexArray = new Vertex[2];
+                for (int i = 0; i < 2; i++) {
+                    GameObject newVertexObj = Instantiate(vertexPrefab);
+                    Vertex newVertex = newVertexObj.GetComponent<Vertex>();
+                    newVertex.transform.SetParent(vertexHolder.transform);
+                    newVertex.Initialize(new Vector2Int(x - 1, y - 1), i);
+                    newVertexArray[i] = newVertex;
+                }
+                vertices[x, y] = newVertexArray;
             }
         }
 
-        vertices = new Vertex[_width + 1, _height * 2 + 1];
-        for (int x = 0; x < vertices.GetLength(0); x++) {
-            for (int y = 0; y < vertices.GetLength(1); y++) {
-                GameObject newVertexObj = Instantiate(vertexPrefab);
-                Vertex newVertex = newVertexObj.GetComponent<Vertex>();
-                newVertex.transform.SetParent(vertexHolder.transform);
-                newVertex.Initialize(new Vector2Int(x, y));
-                vertices[x, y] = newVertex;
-            }
-        }
-        //CameraController.UpdateCamera(width, height);
 
     }
 
@@ -95,7 +99,7 @@ public class MapController : MonoBehaviour {
         }
     }
     public Cell GetCell(Vector3Int _cube) {
-        return GetCell(Hex.CubeToOffset(_cube));
+        return GetCell(Hex.CellCubeToOffset(_cube));
     }
 
 
@@ -108,7 +112,7 @@ public class MapController : MonoBehaviour {
         }
     }
     public bool isValidCoord(Vector3Int _cube) {
-        return isValidCoord(Hex.CubeToOffset(_cube));
+        return isValidCoord(Hex.CellCubeToOffset(_cube));
     }
 
 
@@ -118,7 +122,7 @@ public class MapController : MonoBehaviour {
 
     public List<Cell> Ring(Vector3Int _origin, int radius) {
         List<Cell> cellList = new List<Cell>();
-        foreach (Vector3Int cube in Hex.Ring(_origin, radius)) {
+        foreach (Vector3Int cube in Hex.CellRing(_origin, radius)) {
             if (isValidCoord(cube)) {
                 cellList.Add(GetCell(cube));
             }
@@ -128,7 +132,7 @@ public class MapController : MonoBehaviour {
 
     public List<Cell> Spiral(Vector3Int _origin, int radius) {
         List<Cell> cellList = new List<Cell>();
-        foreach (Vector3Int cube in Hex.Spiral(_origin, radius)) {
+        foreach (Vector3Int cube in Hex.CellSpiral(_origin, radius)) {
             if (isValidCoord(cube)) {
                 cellList.Add(GetCell(cube));
             }

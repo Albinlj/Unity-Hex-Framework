@@ -4,27 +4,41 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+
 class Layout {
-    public static float radius = 1;
+    public static float radius = 0.5f;
 
     public static bool isFlatTop = true;
 
+    public Vector2 borderDirections { get; private set; }
+
+    //public Vector2[] CubeVectors {
+    //    get { return Hex.vertexDirections.Select(a => new Vector2()}
+    //    private set { }
+    //}
+
+
+    static public float RadiusInner {
+        get { return radius * (float)Math.Sqrt(3) / 2; }
+        private set { }
+    }
     static public float OffsetX {
         get {
             if (isFlatTop)
-                return radius * 3 / 4;
+                return radius * 3 / 2;
             else
-                return radius * (float)Math.Sqrt(3) / 2;
+                return RadiusInner * 2;
         }
         private set { }
     }
+
 
     static public float OffsetY {
         get {
             if (!isFlatTop)
-                return radius * 3 / 4;
+                return radius * 3 / 2;
             else
-                return radius * (float)Math.Sqrt(3) / 2;
+                return RadiusInner * 2;
         }
         private set { }
     }
@@ -32,18 +46,26 @@ class Layout {
 
 
 
-    public static Vector2 offsetToWorld(Vector2Int offsetCoord) {
+    public static Vector2 CellOffsetToWorld(Vector2Int _offset) {
         float x, y;
-        x = offsetCoord.x * OffsetX;
-        y = (offsetCoord.y + ((float)offsetCoord.x % 2) / 2) * OffsetY;
+        x = _offset.x * OffsetX;
+        y = (_offset.y + ((float)Math.Abs(_offset.x) % 2) / 2) * OffsetY;
         return new Vector2(x, y);
     }
 
-    public static Vector2 axialToWorld(Vector2Int axialCoord) {
+    public static Vector2 CubeToWorld(Vector3Int _cube) {
         float x, y;
-        y = radius * (float)(axialCoord.x * Math.Sqrt(3) / 2 + Math.Sqrt(3));
-        x = radius * (axialCoord.x * 3 / 2);
+        x = (_cube.x - _cube.y - _cube.z) * OffsetX / 2;
+        y = _cube.y * RadiusInner - _cube.z * RadiusInner;
         return new Vector2(x, y);
     }
 
+
+    public static Vector2 BorderOffsetToWorld(Vector2Int _offset, int _index) {
+        return CellOffsetToWorld(_offset) + CubeToWorld(Hex.cellDirections[_index]) / 2;
+    }
+
+    public static Vector2 VertexOffsetToWorld(Vector2Int _offset, int _index) {
+        return CellOffsetToWorld(_offset) + new Vector2(0.5f - _index, 0);
+    }
 }
