@@ -9,7 +9,8 @@ public class CameraController : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start() {
+    private void Awake() {
+
         if (instance != this) {
             instance = this;
         }
@@ -17,15 +18,18 @@ public class CameraController : MonoBehaviour {
             Debug.LogError("CameraController tried to start another instance");
         }
     }
+    void Start() {
+    }
 
     // Update is called once per frame
     void Update() {
 
     }
 
+
     public void UpdateCamera(int width, int heigth) {
         myCamera.transform.position = new Vector3((width - 1) * Layout.RadiusInner, (heigth - 0.5f) * Layout.RadiusInner, -1);
-        myCamera.orthographicSize = (heigth + 0.5f) * Layout.RadiusInner + padding;
+        myCamera.orthographicSize = (heigth - 1.5f) * Layout.RadiusInner + padding;
         myCamera.ResetAspect();
     }
 }

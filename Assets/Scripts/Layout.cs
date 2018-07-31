@@ -5,6 +5,8 @@ using System.Text;
 using UnityEngine;
 
 
+
+
 class Layout {
     public static float radius = 0.5f;
 
@@ -59,7 +61,7 @@ class Layout {
         y = _cube.y * RadiusInner - _cube.z * RadiusInner;
         return new Vector2(x, y);
     }
-    
+
 
 
 }

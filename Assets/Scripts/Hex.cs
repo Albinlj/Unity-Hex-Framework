@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hex {
 
 
-    static public Vector3Int[] cellDirections = new Vector3Int[] {
+    static public Vector3Int[] cubeDirections = new Vector3Int[] {
         new Vector3Int(1,0,-1),
         new Vector3Int(0,1,-1),
         new Vector3Int(-1,1,0),
@@ -14,7 +14,7 @@ public class Hex {
         new Vector3Int(1,-1,0)
         };
 
-    static public Vector3Int[] cubeDirections = new Vector3Int[] {
+    static public Vector3Int[] axisDirections = new Vector3Int[] {
         new Vector3Int(1,0,0),
         new Vector3Int(0,0,-1),
         new Vector3Int(0,1,0),
@@ -57,11 +57,11 @@ public class Hex {
 
     static public List<Vector3Int> CellRing(Vector3Int _origin, int radius) {
         List<Vector3Int> coordList = new List<Vector3Int>();
-        Vector3Int addCoord = _origin + Hex.cellDirections[4] * radius;
+        Vector3Int addCoord = _origin + Hex.cubeDirections[4] * radius;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < radius; j++) {
                 coordList.Add(addCoord);
-                addCoord = addCoord + Hex.cellDirections[i];
+                addCoord = addCoord + Hex.cubeDirections[i];
             }
         }
         return coordList;
@@ -77,7 +77,7 @@ public class Hex {
     }
 
     static public Vector3Int Neighbor(Vector3Int _cube, int _dir) {
-        return _cube + Hex.cellDirections[_dir];
+        return _cube + Hex.cubeDirections[_dir];
     }
 
     static public List<Vector3Int> BorderCellNeighbors(Vector3Int _cube, int _dir) {
@@ -88,21 +88,43 @@ public class Hex {
 
     }
 
+    static public List<BorderCoord> VertexBorderNeighbors(VertexCoord _vertex) {
+        List<BorderCoord> borderCoordList = new List<BorderCoord>();
+
+        if (_vertex.Index == 0) {
+            borderCoordList.Add(new BorderCoord(_vertex.Cube, 0));
+            borderCoordList.Add(new BorderCoord(Neighbor(_vertex.Cube, 5), 1));
+            borderCoordList.Add(new BorderCoord(Neighbor(_vertex.Cube, 5), 2));
+        }
+        else {
+            borderCoordList.Add(new BorderCoord(_vertex.Cube, 2));
+            borderCoordList.Add(new BorderCoord(Neighbor(_vertex.Cube, 3), 0));
+            borderCoordList.Add(new BorderCoord(Neighbor(_vertex.Cube, 3), 1));
+        }
+
+        return borderCoordList;
+    }
+
     static public List<Vector3Int> VertexCellNeighbors(Vector3Int _cube, int _dir) {
         List<Vector3Int> cubeList = new List<Vector3Int>();
         cubeList.Add(_cube);
         switch (_dir) {
             case 0:
-                cubeList.Add(_cube + cellDirections[0]);
-                cubeList.Add(_cube + cellDirections[5]);
+                cubeList.Add(_cube + cubeDirections[0]);
+                cubeList.Add(_cube + cubeDirections[5]);
                 break;
             case 1:
-                cubeList.Add(_cube + cellDirections[2]);
-                cubeList.Add(_cube + cellDirections[3]);
+                cubeList.Add(_cube + cubeDirections[2]);
+                cubeList.Add(_cube + cubeDirections[3]);
                 break;
             default:
                 break;
         }
         return cubeList;
+    }
+
+    static public int findDir(Vector3Int from, Vector3Int to) {
+        Vector3Int vector = to - from;
+        return Array.IndexOf(cubeDirections, vector);
     }
 }

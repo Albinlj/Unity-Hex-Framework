@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-
 public class CellTester : EditorWindow {
 
     [MenuItem("Tools/Show The Strut")]
@@ -38,6 +37,12 @@ public class CellTester : EditorWindow {
             Selection.activeGameObject.transform.position = Layout.CubeToWorld(new Vector3Int(3, 1, -4));
         }
 
+        if (GUILayout.Button("Clear all Rails")) {
+            RailController.instance.DeleteAllRails();
+        }
+        if (GUILayout.Button("Spawn Train at 0 0 0")) {
+            TrainController.instance.SpawnTrain(Vector3Int.zero, new Path(4, 1));
+        }
 
     }
 }
