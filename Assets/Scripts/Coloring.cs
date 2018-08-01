@@ -5,17 +5,9 @@ using UnityEngine;
 public class Coloring {
 
     public static void RandomizeColor(GameObject _gameObject) {
-        SpriteRenderer renderer = _gameObject.GetComponentInChildren<SpriteRenderer>();
-        if (renderer != null) {
-            RandomizeColor(renderer);
-        }
 
-
-    }
-
-    public static void RandomizeColor(SpriteRenderer _renderer) {
         Color newColor;
-        newColor = Random.ColorHSV(0f, 1f, 0.5f, 0.5f, 0.8f, 1f);
+        //newColor = Random.ColorHSV(0f, 1f, 0.5f, 0.5f, 0.8f, 1f);
 
         switch (Random.Range(0, 3)) {
             case 0:
@@ -33,10 +25,31 @@ public class Coloring {
                 break;
         }
         newColor.a = Random.Range(0, 5) > 2 ? 0 : 1;
-        _renderer.color = newColor;
+        ChangeColor(_gameObject, newColor);
     }
 
 
+    public static void ChangeColor(GameObject _gameObject, Color _color) {
+        SpriteRenderer renderer = _gameObject.GetComponentInChildren<SpriteRenderer>();
+        if (renderer != null) {
+            renderer.color = _color;
+        }
+    }
+
+    public static Color GetColor(GameObject _gameObject) {
+        SpriteRenderer renderer = _gameObject.GetComponentInChildren<SpriteRenderer>();
+        if (renderer != null) {
+            return renderer.color;
+        }
+        else {
+            Debug.Log("Trying to GetColor from GO without renderer");
+            return Color.grey;
+        }
+    }
+
 }
+
+
+
 
 

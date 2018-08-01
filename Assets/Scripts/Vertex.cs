@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class Vertex : MonoBehaviour {
-    VertexCoord coord;
-
+public class Vertex : Piece {
+    [SerializeField]
+    private VertexCoord coord;
+    public VertexCoord Coord { get { return coord; } private set { } }
 
     //Event Actions
     static public event Action<Vertex> ClickedEvent;
-    static public event Action<Vertex> EnterEvent;
-    static public event Action<Vertex> ExitEvent;
-    static public event Action<Vertex> UpEvent;
+    //static public event Action<Vertex> EnterEvent;
+    //static public event Action<Vertex> ExitEvent;
+    //static public event Action<Vertex> UpEvent;
 
     public List<Border> Borders {
-        get { return MapController.instance.GetBorders(Hex.VertexBorderNeighbors(coord)); }
+        get { return MapController.instance.GetBorders(Hex.GetVertexBorderNeighbors(coord)); }
         private set { }
     }
 

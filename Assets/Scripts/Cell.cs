@@ -4,7 +4,7 @@ using System.Linq;
 using System;
 using UnityEngine;
 
-public class Cell : MonoBehaviour {
+public class Cell : Piece {
 
     //Event Actions
     static public event Action<Cell> ClickedEvent;
@@ -13,14 +13,13 @@ public class Cell : MonoBehaviour {
     static public event Action<Cell> UpEvent;
 
     //Fields
-    public Rail[] rails = new Rail[2];
+    //public Rail[] rails = new Rail[2];
     public GameObject coordUIPrefab;
     public List<Train> trains = new List<Train>();
 
     [SerializeField]
     private Vector3Int cubeCoord;
     private PolygonCollider2D polyCollider;
-    private MapController mapController = MapController.instance;
 
     //Properties
     public Vector2Int OffsetCoord {
@@ -34,7 +33,7 @@ public class Cell : MonoBehaviour {
 
     //Use this for initialization
     private void Start() {
-        AddUI();
+        //AddUI();
         Coloring.RandomizeColor(gameObject);
         polyCollider = gameObject.GetComponent<PolygonCollider2D>();
     }
@@ -56,6 +55,8 @@ public class Cell : MonoBehaviour {
     private void OnMouseUp() {
         UpEvent(this);
     }
+
+    //Is called after Instantiation, kind of like a constructor.
     public void Initialize(Vector3Int _cube) {
         transform.name = "Cell [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
         cubeCoord = _cube;
@@ -71,21 +72,25 @@ public class Cell : MonoBehaviour {
     }
 
     public Cell Neighbor(int _dir) {
-        return MapController.instance.GetCell(Hex.Neighbor(cubeCoord, _dir));
+        return MapController.instance.GetCell(Hex.GetCellCellNeighborFromDir(cubeCoord, _dir));
     }
 
-    public void AddRail(Rail rail) {
-        if (rails[0] == null) {
-            rails[0] = rail;
-        }
-        else if (rails[1] == null) {
-            rails[1] = rail;
-        }
-
-        if (rails[0].path.Sorted == rail.path.Sorted) {
-
-        }
-
-
+    public void ChangeCoord(Vector3Int _cube) {
+        MapController.instance.cells[Hex.CellCubeToOffset(this.CubeCoord).x, Hex.CellCubeToOffset(this.CubeCoord).y] = this;
     }
+
+    //public void AddRail(Rail rail) {
+    //    if (rails[0] == null) {
+    //        rails[0] = rail;
+    //    }
+    //    else if (rails[1] == null) {
+    //        rails[1] = rail;
+    //    }
+
+    //    if (rails[0].path.Sorted == rail.path.Sorted) {
+
+    //    }
+
+
+    //}
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Border : MonoBehaviour {
+public class Border : Piece {
     //Fields
     [SerializeField]
     private BorderCoord coord;
@@ -12,17 +12,19 @@ public class Border : MonoBehaviour {
         private set { }
     }
 
+
     //Event Actions
     static public event Action<Border> ClickedEvent;
-    static public event Action<Border> EnterEvent;
-    static public event Action<Border> ExitEvent;
-    static public event Action<Border> UpEvent;
+    //static public event Action<Border> EnterEvent;
+    //static public event Action<Border> ExitEvent;
+    //static public event Action<Border> UpEvent;
 
 
 
 
     // Use this for initialization
     void Start() {
+
         Coloring.RandomizeColor(gameObject);
     }
 
@@ -42,11 +44,15 @@ public class Border : MonoBehaviour {
         transform.Rotate(new Vector3(0, 0, -60 + 60 * _index));
     }
 
-    public bool NeighborCells() {
-        List<Cell> neighborList = new List<Cell>();
-        if (MapController.instance.isValidCoord(coord.Cube)) {
-            neighborList.Add(MapController.instance.GetCell(coord.Cube));
+    public Boolean RotateAround(Piece _piece) {
+        if (_piece is Vertex) {
+
+            return true;
         }
-        return true;
+        else if (_piece is Cell) {
+
+            return true;
+        }
+        return false;
     }
 }

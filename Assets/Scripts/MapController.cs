@@ -13,7 +13,6 @@ public class MapController : MonoBehaviour {
     private GameObject vertexHolder;
 
     public Cell[,] cells;
-
     private Border[,][] borders;
     private Vertex[,][] vertices;
 
@@ -46,15 +45,13 @@ public class MapController : MonoBehaviour {
 
     }
 
-
-
-    void OnVertexMouseDown(Vertex _vertex) {
-
+    private void UpdateCoord(Piece _piece) {
+        if (_piece is Border) {
+            Vector2Int offsetCoord = (Border)_piece.coord
+            borders[]
+        }
 
     }
-
-    //void RotateBorderAroundVertex(Border _border, bool clockwise) {
-    //}
 
     public void CreateRectMap(int _width, int _height) {
 
@@ -82,7 +79,7 @@ public class MapController : MonoBehaviour {
                 //Instantiates a Border if it has a neighboring Cell 
                 Border[] newBorderArray = new Border[3];
                 for (int i = 0; i < 3; i++) {
-                    if (hasValidCoord(Hex.BorderCellNeighbors(cube, i))) {
+                    if (hasValidCoord(Hex.GetBorderCellNeighbors(cube, i))) {
                         GameObject newBorderObj = Instantiate(borderPrefab);
                         Border newBorder = newBorderObj.GetComponent<Border>();
                         newBorder.transform.SetParent(borderHolder.transform);
@@ -95,7 +92,7 @@ public class MapController : MonoBehaviour {
                 //Instantiates a Vertex if it has a neighboring Cell
                 Vertex[] newVertexArray = new Vertex[2];
                 for (int i = 0; i < 2; i++) {
-                    if (hasValidCoord(Hex.VertexCellNeighbors(cube, i))) {
+                    if (hasValidCoord(Hex.GetVertexCellNeighbors(cube, i))) {
 
                         GameObject newVertexObj = Instantiate(vertexPrefab);
                         Vertex newVertex = newVertexObj.GetComponent<Vertex>();
@@ -136,7 +133,12 @@ public class MapController : MonoBehaviour {
 
     //Returns Border from BorderCoord
     public Border GetBorder(BorderCoord _borderCoord) {
-        return borders[Hex.CellCubeToOffset(_borderCoord.Cube).x + 1, Hex.CellCubeToOffset(_borderCoord.Cube).y + 1][_borderCoord.Index];
+        return borders[
+                Hex.CellCubeToOffset(_borderCoord.Cube).x + 1,
+                Hex.CellCubeToOffset(_borderCoord.Cube).y + 1
+                ][
+                _borderCoord.Index
+                ];
     }
 
     //Returns Borders from BorderCoords
@@ -186,7 +188,7 @@ public class MapController : MonoBehaviour {
     //Takes a border coordinate and returns its two neighboring Cells.
     public List<Cell> BorderCellNeighbors(Vector3Int _cube, int _dir) {
         List<Cell> neighborList = new List<Cell>();
-        foreach (Vector3Int cube in Hex.BorderCellNeighbors(_cube, _dir)) {
+        foreach (Vector3Int cube in Hex.GetBorderCellNeighbors(_cube, _dir)) {
             if (isValidCoord(cube))
                 neighborList.Add(GetCell(cube));
         }
@@ -195,7 +197,7 @@ public class MapController : MonoBehaviour {
 
     //Returns direction from one cell to another
     public int FindDir(Cell from, Cell to) {
-        return Hex.findDir(from.CubeCoord, to.CubeCoord);
+        return Hex.FindCellDir(from.CubeCoord, to.CubeCoord);
     }
 
     //Returns a list of Cells with a given radius from specified origin.

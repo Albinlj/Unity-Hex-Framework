@@ -24,6 +24,13 @@ public struct BorderCoord {
         private set { }
     }
 
+    public static bool operator ==(BorderCoord b1, BorderCoord b2) {
+        return b1.Equals(b2);
+    }
+
+    public static bool operator !=(BorderCoord b1, BorderCoord b2) {
+        return !b1.Equals(b2);
+    }
 
 }
 
