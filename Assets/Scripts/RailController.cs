@@ -50,7 +50,7 @@ public class RailController : MonoBehaviour {
 
                 if (path.IsValid || true) {
                     Debug.Log("Building with path " + path[0] + ", " + path[1]);
-                    SpawnRail(buildCell.CubeCoord, path);
+                    SpawnRail(buildCell.Coord, path);
                 }
                 else {
                     buildingCells = buildingCells.GetRange(count - 2, 2);

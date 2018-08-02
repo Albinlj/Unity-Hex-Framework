@@ -38,15 +38,34 @@ public class Border : Piece {
         ClickedEvent(this);
     }
     public void Initialize(Vector3Int _cube, int _index) {
-        coord = new BorderCoord(_cube, _index);
-        transform.name = "Border [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
-        transform.position = Layout.CubeToWorld(_cube) + Layout.CubeToWorld(Hex.cubeDirections[_index]) / 2;
-        transform.Rotate(new Vector3(0, 0, -60 + 60 * _index));
+        UpdateCoord(new BorderCoord(_cube, _index));
+        UpdatePosition();
     }
 
-    public Boolean RotateAround(Piece _piece) {
-        if (_piece is Vertex) {
+    private void UpdatePosition() {
+        Vector2 position = Layout.CubeToWorld(coord.Cube) + Layout.CubeToWorld(Hex.cubeDirections[coord.Index]) / 2;
+        Quaternion rotation = Quaternion.AngleAxis(60 - 60 * coord.Index, Vector3.back);
 
+        transform.SetPositionAndRotation(position, rotation);
+    }
+
+
+    private void UpdateCoord(BorderCoord _newCoord) {
+        coord = _newCoord;
+        int x = _newCoord.Cube.x;
+        int y = _newCoord.Cube.y;
+        int z = _newCoord.Cube.z;
+        transform.name = "Border [" + x + ", " + y + ", " + z + "]" + "<" + _newCoord.Index + ">";
+        MapController.instance.UpdateCoordInMap(this);
+    }
+
+
+    public Boolean RotateAround(Piece _piece, Boolean _clockwise) {
+        if (_piece is Vertex) {
+            Vertex vertex = (Vertex)_piece;
+            BorderCoord newCoord = Hex.FindRotatedCoordAroundVertex(vertex.Coord, coord, _clockwise);
+            UpdateCoord(newCoord);
+            UpdatePosition();
             return true;
         }
         else if (_piece is Cell) {
@@ -55,4 +74,7 @@ public class Border : Piece {
         }
         return false;
     }
+
+
+
 }

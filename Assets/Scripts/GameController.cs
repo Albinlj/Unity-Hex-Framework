@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour {
     void Start() {
 
         MapController.instance.CreateRectMap(7, 5);
-        Vertex.ClickedEvent += Moves.DeleteVertexBorders;
+        Vertex.PrimaryClickedEvent += Moves.RotateVertexBorders;
     }
 
     void Update() {

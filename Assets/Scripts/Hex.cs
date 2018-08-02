@@ -165,22 +165,7 @@ public class Hex {
 
     //Finds the new Coord of a Border if it is rotated around one of it's axises
     static public BorderCoord FindRotatedCoordAroundVertex(VertexCoord _vertexCoord, BorderCoord _borderCoord, Boolean _clockwise) {
-        //switch (_clockwise) {
-        //    case true:
-        //        switch (_vertexCoord.Index) {
-        //            case 0:
 
-        //            case 1:
-
-        //            default:
-        //                break;
-        //        }
-        //        break;
-        //    case false:
-        //        break;
-        //    default:
-        //        break;
-        //}
         List<BorderCoord> borderCoords = GetVertexBorderNeighbors(_vertexCoord);
         for (int i = 0; i < 3; i++) {
             if (_borderCoord == borderCoords[i]) {

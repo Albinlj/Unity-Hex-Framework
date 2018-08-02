@@ -45,13 +45,6 @@ public class MapController : MonoBehaviour {
 
     }
 
-    private void UpdateCoord(Piece _piece) {
-        if (_piece is Border) {
-            Vector2Int offsetCoord = (Border)_piece.coord
-            borders[]
-        }
-
-    }
 
     public void CreateRectMap(int _width, int _height) {
 
@@ -78,6 +71,7 @@ public class MapController : MonoBehaviour {
 
                 //Instantiates a Border if it has a neighboring Cell 
                 Border[] newBorderArray = new Border[3];
+                borders[x, y] = newBorderArray;
                 for (int i = 0; i < 3; i++) {
                     if (hasValidCoord(Hex.GetBorderCellNeighbors(cube, i))) {
                         GameObject newBorderObj = Instantiate(borderPrefab);
@@ -87,10 +81,10 @@ public class MapController : MonoBehaviour {
                         newBorderArray[i] = newBorder;
                     }
                 }
-                borders[x, y] = newBorderArray;
 
                 //Instantiates a Vertex if it has a neighboring Cell
                 Vertex[] newVertexArray = new Vertex[2];
+                vertices[x, y] = newVertexArray;
                 for (int i = 0; i < 2; i++) {
                     if (hasValidCoord(Hex.GetVertexCellNeighbors(cube, i))) {
 
@@ -101,7 +95,6 @@ public class MapController : MonoBehaviour {
                         newVertexArray[i] = newVertex;
                     }
                 }
-                vertices[x, y] = newVertexArray;
             }
         }
 
@@ -197,7 +190,7 @@ public class MapController : MonoBehaviour {
 
     //Returns direction from one cell to another
     public int FindDir(Cell from, Cell to) {
-        return Hex.FindCellDir(from.CubeCoord, to.CubeCoord);
+        return Hex.FindCellDir(from.Coord, to.Coord);
     }
 
     //Returns a list of Cells with a given radius from specified origin.
@@ -220,6 +213,20 @@ public class MapController : MonoBehaviour {
             }
         }
         return cellList;
+    }
+
+
+    public void UpdateCoordInMap(Cell _cell) {
+        MapController.instance.cells[Hex.CellCubeToOffset(_cell.Coord).x, Hex.CellCubeToOffset(_cell.Coord).y] = _cell;
+    }
+    public void UpdateCoordInMap(Border _border) {
+
+        Vector2Int offsetCoord = Hex.CellCubeToOffset(_border.Coord.Cube);
+
+        MapController.instance.borders[offsetCoord.x, offsetCoord.y][_border.Coord.Index] = _border;
+    }
+    public void UpdateCoordInMap(Vertex _vertex) {
+        MapController.instance.vertices[Hex.CellCubeToOffset(_vertex.Coord.Cube).x, Hex.CellCubeToOffset(_vertex.Coord.Cube).y][_vertex.Coord.Index] = _vertex;
     }
 
 }

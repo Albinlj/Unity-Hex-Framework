@@ -13,7 +13,7 @@ public class CellTester : EditorWindow {
 
         if (GUILayout.Button("Move Neighbors!")) {
             if (Selection.activeGameObject != null) {
-                foreach (Cell cell in MapController.instance.Spiral(Selection.activeGameObject.GetComponent<Cell>().CubeCoord, 3)) {
+                foreach (Cell cell in MapController.instance.Spiral(Selection.activeGameObject.GetComponent<Cell>().Coord, 3)) {
                     cell.gameObject.transform.position = new Vector3(-2, -2, -2);
                 }
 

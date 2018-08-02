@@ -18,16 +18,16 @@ public class Cell : Piece {
     public List<Train> trains = new List<Train>();
 
     [SerializeField]
-    private Vector3Int cubeCoord;
+    private Vector3Int coord;
     private PolygonCollider2D polyCollider;
 
     //Properties
     public Vector2Int OffsetCoord {
-        get { return Hex.CellCubeToOffset(cubeCoord); }
+        get { return Hex.CellCubeToOffset(coord); }
         private set { }
     }
-    public Vector3Int CubeCoord {
-        get { return cubeCoord; }
+    public Vector3Int Coord {
+        get { return coord; }
         private set { }
     }
 
@@ -41,7 +41,7 @@ public class Cell : Piece {
     //Eventhandlers
     private void OnMouseDown() {
         ClickedEvent(this);
-        Debug.Log(CubeCoord);
+        Debug.Log(Coord);
         Debug.Log(trains);
     }
 
@@ -59,7 +59,7 @@ public class Cell : Piece {
     //Is called after Instantiation, kind of like a constructor.
     public void Initialize(Vector3Int _cube) {
         transform.name = "Cell [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
-        cubeCoord = _cube;
+        coord = _cube;
         transform.position = Layout.CubeToWorld(_cube);
     }
 
@@ -67,16 +67,16 @@ public class Cell : Piece {
         GameObject coordUI = Instantiate(coordUIPrefab, transform);
 
         for (int i = 0; i < 3; i++) {
-            coordUI.transform.GetChild(i).gameObject.GetComponent<UnityEngine.UI.Text>().text = cubeCoord[i].ToString();
+            coordUI.transform.GetChild(i).gameObject.GetComponent<UnityEngine.UI.Text>().text = coord[i].ToString();
         }
     }
 
     public Cell Neighbor(int _dir) {
-        return MapController.instance.GetCell(Hex.GetCellCellNeighborFromDir(cubeCoord, _dir));
+        return MapController.instance.GetCell(Hex.GetCellCellNeighborFromDir(coord, _dir));
     }
 
     public void ChangeCoord(Vector3Int _cube) {
-        MapController.instance.cells[Hex.CellCubeToOffset(this.CubeCoord).x, Hex.CellCubeToOffset(this.CubeCoord).y] = this;
+        MapController.instance.cells[Hex.CellCubeToOffset(this.Coord).x, Hex.CellCubeToOffset(this.Coord).y] = this;
     }
 
     //public void AddRail(Rail rail) {
