@@ -22,8 +22,11 @@ public class GameController : MonoBehaviour {
     }
     void Start() {
 
-        MapController.instance.CreateRectMap(7, 5);
-        Vertex.PrimaryClickedEvent += Moves.RotateVertexBorders;
+
+        MapController.instance.CreateRectMap(4, 3);
+        Vertex.ClickedEvent += Moves.RotateVertexBorders;
+        Cell.ClickedEvent += Moves.RotateCellBorders;
+
     }
 
     void Update() {
@@ -37,6 +40,6 @@ public class GameController : MonoBehaviour {
     }
 
     void NewRound() {
-        TrainController.instance.NewRound();
+        //TrainController.instance.NewRound();
     }
 }

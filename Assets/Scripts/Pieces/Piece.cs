@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[Serializable]
 public class Piece : MonoBehaviour {
 
     static public event Action<Piece> PieceClickedEvent;
@@ -10,6 +11,7 @@ public class Piece : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
     }
 
     // Update is called once per frame

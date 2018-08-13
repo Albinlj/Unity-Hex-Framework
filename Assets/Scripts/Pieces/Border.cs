@@ -63,13 +63,16 @@ public class Border : Piece {
     public Boolean RotateAround(Piece _piece, Boolean _clockwise) {
         if (_piece is Vertex) {
             Vertex vertex = (Vertex)_piece;
-            BorderCoord newCoord = Hex.FindRotatedCoordAroundVertex(vertex.Coord, coord, _clockwise);
+            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundVertex(vertex.Coord, coord, _clockwise);
             UpdateCoord(newCoord);
             UpdatePosition();
             return true;
         }
         else if (_piece is Cell) {
-
+            Cell cell = (Cell)_piece;
+            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundCell(cell.Coord, coord, _clockwise);
+            UpdateCoord(newCoord);
+            UpdatePosition();
             return true;
         }
         return false;

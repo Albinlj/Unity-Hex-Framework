@@ -8,7 +8,7 @@ public class Vertex : Piece {
     public VertexCoord Coord { get { return coord; } private set { } }
 
     //Event Actions
-    static public event Action<Vertex, Boolean> PrimaryClickedEvent;
+    static public event Action<Vertex, Boolean> ClickedEvent;
     //static public event Action<Vertex> EnterEvent;
     //static public event Action<Vertex> ExitEvent;
     //static public event Action<Vertex> UpEvent;
@@ -20,6 +20,7 @@ public class Vertex : Piece {
 
     // Use this for initialization
     void Start() {
+
         Coloring.RandomizeColor(this.gameObject);
     }
 
@@ -34,7 +35,11 @@ public class Vertex : Piece {
         Debug.Log("Clicked on Vertex[" + coord.Cube.x + ", " + coord.Cube.y + ", " + coord.Cube.z + "], < " + coord.Index + " > ");
 
         if (Input.GetMouseButtonDown(0)) {
-            PrimaryClickedEvent(this, true);
+            ClickedEvent(this, true);
+
+        }
+        if (Input.GetMouseButtonDown(2)) {
+            ClickedEvent(this, false);
 
         }
     }

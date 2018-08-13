@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4669979952499780}
-  - component: {fileID: 114026549691400252}
+  - component: {fileID: 114537270817563860}
   - component: {fileID: 58437917677809006}
   m_Layer: 0
   m_Name: Vertex Prefab
@@ -86,7 +86,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
---- !u!114 &114026549691400252
+--- !u!114 &114537270817563860
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1210091755285116}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93ecc8ee94d4c6a4db7771a812ddc22b, type: 3}
+  m_Script: {fileID: 11500000, guid: 95f5293a24f39b84abc976fe87327e74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212045045109917432

@@ -22,10 +22,10 @@ public class RailController : MonoBehaviour {
 
         railHolder = new GameObject("RailHolder");
         railHolder.transform.SetParent(this.transform);
-        Cell.ClickedEvent += OnMouseDown;
-        Cell.EnterEvent += OnMouseEnter;
-        Cell.ExitEvent += OnMouseExit;
-        Cell.UpEvent += OnMouseUp;
+        //Cell.ClickedEvent += OnMouseDown;
+        //Cell.EnterEvent += OnMouseEnter;
+        //Cell.ExitEvent += OnMouseExit;
+        //Cell.UpEvent += OnMouseUp;
 
 
     }

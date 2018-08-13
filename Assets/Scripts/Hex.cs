@@ -19,10 +19,6 @@ public class Hex {
     //Handles Conversions between Cell Coordinates.
     #region Axial/Cube/Offset-conversions
 
-    static public Vector2Int CellOffsetToAxial(Vector2Int _offset) {
-        Vector3Int cube = CellOffsetToCube(_offset);
-        return new Vector2Int(cube.x, cube.y);
-    }
 
     static public Vector3Int CellOffsetToCube(Vector2Int offsetCoord) {
         int x, y, z;
@@ -31,24 +27,17 @@ public class Hex {
         z = -x - y;
         return new Vector3Int(x, y, z);
     }
-    static public Vector2Int CellAxialToOffset(Vector2Int _axial) {
-        int x, y;
-        x = _axial.x;
-        y = _axial.y + _axial.x / 2;
-        return new Vector2Int(x, y);
-    }
-    static public Vector3Int CellAxialToCube(Vector2Int axialCoord) {
-        return new Vector3Int(axialCoord.x, axialCoord.y, -axialCoord.x - axialCoord.y);
-    }
 
     static public Vector2Int CellCubeToOffset(Vector3Int _cube) {
-
-        return CellAxialToOffset(CellCubeToAxial(_cube));
+        int x, y;
+        x = _cube.x;
+        y = -_cube.z - (_cube.x + _cube.x % 2) / 2;
+        //Debug.Log("cube is " + _cube.x + ", " + _cube.y + ", " + _cube.z);
+        //Debug.Log("offset is " + x + ", " + y);
+        return new Vector2Int(x, y);
     }
 
-    static public Vector2Int CellCubeToAxial(Vector3Int _cube) {
-        return new Vector2Int(_cube.x, _cube.y);
-    }
+
     #endregion
 
     //Finds neighbors of Cells, Borders and Vertices.
@@ -58,11 +47,23 @@ public class Hex {
         return _cube + Hex.cubeDirections[_dir];
     }
 
+    public static List<BorderCoord> GetCellBorderNeighbors(Vector3Int _cellCoord) {
+        return new List<BorderCoord> {
+            new BorderCoord(_cellCoord, 0),
+            new BorderCoord(_cellCoord, 1),
+            new BorderCoord(_cellCoord, 2),
+            new BorderCoord(_cellCoord+cubeDirections[3], 0),
+            new BorderCoord(_cellCoord+cubeDirections[4], 1),
+            new BorderCoord(_cellCoord+cubeDirections[5], 2)
+
+        };
+    }
+
 
     static public List<Vector3Int> GetBorderCellNeighbors(Vector3Int _cube, int _dir) {
         List<Vector3Int> cubeList = new List<Vector3Int>();
         cubeList.Add(_cube);
-        cubeList.Add(GetCellCellNeighborFromDir(_cube, _dir));
+        cubeList.Add(_cube + cubeDirections[_dir]);
         return cubeList;
 
     }
@@ -72,16 +73,16 @@ public class Hex {
             case 0:
                 return new List<VertexCoord> {
                     new VertexCoord(_borderCoord.Cube, 0),
-                    new VertexCoord(GetCellCellNeighborFromDir(_borderCoord.Cube, 0), 1)
+                    new VertexCoord(_borderCoord.Cube + cubeDirections[0], 1)
                 };
             case 1:
                 return new List<VertexCoord> {
-                    new VertexCoord(GetCellCellNeighborFromDir(_borderCoord.Cube, 0), 1),
-                    new VertexCoord(GetCellCellNeighborFromDir(_borderCoord.Cube, 2), 0)
+                    new VertexCoord(_borderCoord.Cube + cubeDirections[0], 1),
+                    new VertexCoord(_borderCoord.Cube + cubeDirections[2], 0)
                 };
             case 2:
                 return new List<VertexCoord> {
-                    new VertexCoord(GetCellCellNeighborFromDir(_borderCoord.Cube, 2), 0),
+                    new VertexCoord(_borderCoord.Cube + cubeDirections[2], 0),
                     new VertexCoord(_borderCoord.Cube, 1)
                 };
             default:
@@ -94,13 +95,13 @@ public class Hex {
         List<BorderCoord> borderCoordList = new List<BorderCoord>();
         if (_vertexCoord.Index == 0) {
             borderCoordList.Add(new BorderCoord(_vertexCoord.Cube, 0));
-            borderCoordList.Add(new BorderCoord(GetCellCellNeighborFromDir(_vertexCoord.Cube, 5), 1));
-            borderCoordList.Add(new BorderCoord(GetCellCellNeighborFromDir(_vertexCoord.Cube, 5), 2));
+            borderCoordList.Add(new BorderCoord(_vertexCoord.Cube + cubeDirections[5], 1));
+            borderCoordList.Add(new BorderCoord(_vertexCoord.Cube + cubeDirections[5], 2));
         }
         else {
             borderCoordList.Add(new BorderCoord(_vertexCoord.Cube, 2));
-            borderCoordList.Add(new BorderCoord(GetCellCellNeighborFromDir(_vertexCoord.Cube, 3), 0));
-            borderCoordList.Add(new BorderCoord(GetCellCellNeighborFromDir(_vertexCoord.Cube, 3), 1));
+            borderCoordList.Add(new BorderCoord(_vertexCoord.Cube + cubeDirections[3], 0));
+            borderCoordList.Add(new BorderCoord(_vertexCoord.Cube + cubeDirections[3], 1));
         }
         return borderCoordList;
     }
@@ -157,33 +158,44 @@ public class Hex {
 
 
     //Finds Direction from one Cell to another.
-    static public int FindCellDir(Vector3Int from, Vector3Int to) {
+    static public int GetCellDir(Vector3Int from, Vector3Int to) {
         Vector3Int vector = to - from;
         return Array.IndexOf(cubeDirections, vector);
     }
 
 
     //Finds the new Coord of a Border if it is rotated around one of it's axises
-    static public BorderCoord FindRotatedCoordAroundVertex(VertexCoord _vertexCoord, BorderCoord _borderCoord, Boolean _clockwise) {
-
+    static public BorderCoord GetBorderCoordRotatedAroundVertex(VertexCoord _vertexCoord, BorderCoord _borderCoord, Boolean _clockwise) {
+        //Gets all the borderCoords around the given vertex
         List<BorderCoord> borderCoords = GetVertexBorderNeighbors(_vertexCoord);
+        //Then iterates through the borderCoords to find the given borderCoord, and returns the following border
         for (int i = 0; i < 3; i++) {
             if (_borderCoord == borderCoords[i]) {
                 if (_clockwise)
                     return borderCoords[(i + 1) % 3];
-                else {
-                    if (i == 0) {
-                        return borderCoords[2];
-                    }
-                    else {
-                        return borderCoords[i - 1];
-                    }
-                }
+                else
+                    return borderCoords[(i + 2) % 3];
             }
         }
         Debug.LogError("the border param doesn't seem to be a neighbor of the vertex param");
         return new BorderCoord(Vector3Int.zero, 1);
     }
+
+
+    internal static BorderCoord GetBorderCoordRotatedAroundCell(Vector3Int _cellCoord, BorderCoord _borderCoord, bool _clockwise) {
+        List<BorderCoord> cellBorderNeighbors = GetCellBorderNeighbors(_cellCoord);
+        for (int i = 0; i < 6; i++) {
+            if (_borderCoord == cellBorderNeighbors[i]) {
+                if (_clockwise)
+                    return cellBorderNeighbors[(i + 5) % 6];
+                else
+                    return cellBorderNeighbors[(i + 1) % 6];
+            }
+        }
+        Debug.LogError("the border param doesn't seem to be a neighbor of the cell param");
+        return new BorderCoord(Vector3Int.zero, 1);
+    }
+
 
 
 

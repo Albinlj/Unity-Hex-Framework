@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.IO;
 using UnityEngine;
 
 public class Cell : Piece {
 
     //Event Actions
-    static public event Action<Cell> ClickedEvent;
-    static public event Action<Cell> EnterEvent;
-    static public event Action<Cell> ExitEvent;
-    static public event Action<Cell> UpEvent;
+    static public event Action<Cell, bool> ClickedEvent;
+    //static public event Action<Cell> EnterEvent;
+    //static public event Action<Cell> ExitEvent;
+    //static public event Action<Cell> UpEvent;
 
     //Fields
     //public Rail[] rails = new Rail[2];
-    public GameObject coordUIPrefab;
-    public List<Train> trains = new List<Train>();
 
     [SerializeField]
     private Vector3Int coord;
@@ -31,6 +30,11 @@ public class Cell : Piece {
         private set { }
     }
 
+    public List<Border> Borders {
+        get { return MapController.instance.GetBorders(Hex.GetCellBorderNeighbors(coord)); }
+        private set { }
+    }
+
     //Use this for initialization
     private void Start() {
         //AddUI();
@@ -40,21 +44,25 @@ public class Cell : Piece {
 
     //Eventhandlers
     private void OnMouseDown() {
-        ClickedEvent(this);
+        ClickedEvent(this, true);
         Debug.Log(Coord);
-        Debug.Log(trains);
+
+        string jsonified = JsonUtility.ToJson(this);
+        File.WriteAllText("Assets/strutz.txt", jsonified);
+
+
     }
 
-    private void OnMouseEnter() {
-        EnterEvent(this);
-    }
+    //private void OnMouseEnter() {
+    //    EnterEvent(this);
+    //}
 
-    private void OnMouseExit() {
-        ExitEvent(this);
-    }
-    private void OnMouseUp() {
-        UpEvent(this);
-    }
+    //private void OnMouseExit() {
+    //    ExitEvent(this);
+    //}
+    //private void OnMouseUp() {
+    //    UpEvent(this);
+    //}
 
     //Is called after Instantiation, kind of like a constructor.
     public void Initialize(Vector3Int _cube) {
@@ -63,17 +71,6 @@ public class Cell : Piece {
         transform.position = Layout.CubeToWorld(_cube);
     }
 
-    private void AddUI() {
-        GameObject coordUI = Instantiate(coordUIPrefab, transform);
-
-        for (int i = 0; i < 3; i++) {
-            coordUI.transform.GetChild(i).gameObject.GetComponent<UnityEngine.UI.Text>().text = coord[i].ToString();
-        }
-    }
-
-    public Cell Neighbor(int _dir) {
-        return MapController.instance.GetCell(Hex.GetCellCellNeighborFromDir(coord, _dir));
-    }
 
     public void ChangeCoord(Vector3Int _cube) {
         MapController.instance.cells[Hex.CellCubeToOffset(this.Coord).x, Hex.CellCubeToOffset(this.Coord).y] = this;

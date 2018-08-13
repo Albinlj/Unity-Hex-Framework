@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour {
         }
     }
     void Start() {
+        padding = Layout.RadiusInner;
     }
 
     // Update is called once per frame
@@ -28,8 +29,8 @@ public class CameraController : MonoBehaviour {
 
 
     public void UpdateCamera(int width, int heigth) {
-        myCamera.transform.position = new Vector3((width - 1) * Layout.RadiusInner, (heigth - 0.5f) * Layout.RadiusInner, -1);
-        myCamera.orthographicSize = (heigth - 1.5f) * Layout.RadiusInner + padding;
+        myCamera.transform.position = new Vector3((width) * Layout.RadiusInner, (heigth + 1.5f) * Layout.RadiusInner, -1);
+        myCamera.orthographicSize = (heigth + .5f) * Layout.RadiusInner + padding;
         myCamera.ResetAspect();
     }
 }
