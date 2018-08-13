@@ -13,12 +13,7 @@ public class MapController : MonoBehaviour {
     private GameObject borderHolder;
     private GameObject vertexHolder;
 
-    [SerializeField]
-    public Cell[,] cells;
-    [SerializeField]
-    public Border[,][] borders;
-    [SerializeField]
-    public Vertex[,][] vertices;
+
     private Map map = new Map();
 
 
@@ -57,9 +52,9 @@ public class MapController : MonoBehaviour {
         //Creates cells, borders, and vertexes for the wanted cells, and an 
         //additional layer outside in order to get the needed Vertices and Borders.
         //Items are stored as offset in an Array where 
-        cells = new Cell[_width + 2, _height + 2];
-        borders = new Border[_width + 2, _height + 2][];
-        vertices = new Vertex[_width + 2, _height + 2][];
+        map.cells = new Cell[_width + 2, _height + 2];
+        map.borders = new Border[_width + 2, _height + 2][];
+        map.vertices = new Vertex[_width + 2, _height + 2][];
         for (int x = 0; x < _width + 2; x++) {
             for (int y = 0; y < _height + 2; y++) {
 
@@ -76,7 +71,7 @@ public class MapController : MonoBehaviour {
 
                 //Instantiates a Border if it has a neighboring Cell 
                 Border[] newBorderArray = new Border[3];
-                borders[x, y] = newBorderArray;
+                map.borders[x, y] = newBorderArray;
                 for (int i = 0; i < 3; i++) {
                     if (hasValidCoord(Hex.GetBorderCellNeighbors(cube, i))) {
                         GameObject newBorderObj = Instantiate(borderPrefab);
@@ -88,7 +83,7 @@ public class MapController : MonoBehaviour {
 
                 //Instantiates a Vertex if it has a neighboring Cell
                 Vertex[] newVertexArray = new Vertex[2];
-                vertices[x, y] = newVertexArray;
+                map.vertices[x, y] = newVertexArray;
                 for (int i = 0; i < 2; i++) {
                     if (hasValidCoord(Hex.GetVertexCellNeighbors(cube, i))) {
 
@@ -111,7 +106,7 @@ public class MapController : MonoBehaviour {
     //Getting Cells from offsets or cubes, or a list of cubes.
     private Cell GetCell(Vector2Int _offset) {
         if (isValidCoord(_offset)) {
-            return cells[_offset.x, _offset.y];
+            return map.cells[_offset.x, _offset.y];
         }
         else {
             return null;
@@ -130,7 +125,7 @@ public class MapController : MonoBehaviour {
 
     //Returns Border from BorderCoord
     public Border GetBorder(BorderCoord _borderCoord) {
-        return borders[
+        return map.borders[
                 Hex.CellCubeToOffset(_borderCoord.Cube).x,
                 Hex.CellCubeToOffset(_borderCoord.Cube).y
                 ][
@@ -151,7 +146,7 @@ public class MapController : MonoBehaviour {
 
     //Checks if a coord or a list of coords is inside the playarea
     public bool isValidCoord(Vector2Int _offset) {
-        if (1 <= _offset.x && _offset.x <= cells.GetLength(0) - 2 && 1 <= _offset.y && _offset.y <= cells.GetLength(1) - 2) {
+        if (1 <= _offset.x && _offset.x <= map.cells.GetLength(0) - 2 && 1 <= _offset.y && _offset.y <= map.cells.GetLength(1) - 2) {
             return true;
         }
         else {
@@ -186,17 +181,17 @@ public class MapController : MonoBehaviour {
 
     public void UpdateCoordInMap(Cell _cell) {
         Vector2Int offsetCoord = Hex.CellCubeToOffset(_cell.Coord);
-        MapController.instance.cells[offsetCoord.x, offsetCoord.y] = _cell;
+        map.cells[offsetCoord.x, offsetCoord.y] = _cell;
     }
 
     public void UpdateCoordInMap(Border _border) {
         Vector2Int offsetCoord = Hex.CellCubeToOffset(_border.Info.Coord.Cube);
-        MapController.instance.borders[offsetCoord.x, offsetCoord.y][_border.Info.Coord.Index] = _border;
+        map.borders[offsetCoord.x, offsetCoord.y][_border.Info.Coord.Index] = _border;
     }
 
     public void UpdateCoordInMap(Vertex _vertex) {
         Vector2Int offsetCoord = Hex.CellCubeToOffset(_vertex.Info.Coord.Cube);
-        MapController.instance.vertices[offsetCoord.x, offsetCoord.y][_vertex.Info.Coord.Index] = _vertex;
+        map.vertices[offsetCoord.x, offsetCoord.y][_vertex.Info.Coord.Index] = _vertex;
     }
 
 }

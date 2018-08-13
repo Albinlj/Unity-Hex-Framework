@@ -56,10 +56,6 @@ public class Cell : Piece, IHasInfo {
     }
 
 
-    public void ChangeCoord(Vector3Int _cube) {
-        MapController.instance.cells[Hex.CellCubeToOffset(this.Coord).x, Hex.CellCubeToOffset(this.Coord).y] = this;
-    }
-
     public PieceInfo GetInfo() {
         return info;
     }
