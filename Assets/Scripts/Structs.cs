@@ -31,8 +31,9 @@ public struct BorderCoord {
     public static bool operator !=(BorderCoord b1, BorderCoord b2) {
         return !b1.Equals(b2);
     }
-
 }
+
+
 
 public struct VertexCoord {
     Vector3Int cube;

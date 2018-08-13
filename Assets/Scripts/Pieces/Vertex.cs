@@ -2,37 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-public class Vertex : Piece {
-    [SerializeField]
-    private VertexCoord coord;
-    public VertexCoord Coord { get { return coord; } private set { } }
+public class Vertex : Piece, IHasInfo {
+
+    private VertexInfo info = new VertexInfo();
+    public VertexInfo Info {
+        get { return info; }
+        set { info = value; }
+    }
+
+
 
     //Event Actions
     static public event Action<Vertex, Boolean> ClickedEvent;
-    //static public event Action<Vertex> EnterEvent;
-    //static public event Action<Vertex> ExitEvent;
-    //static public event Action<Vertex> UpEvent;
 
     public List<Border> Borders {
-        get { return MapController.instance.GetBorders(Hex.GetVertexBorderNeighbors(coord)); }
+        get { return MapController.instance.GetBorders(Hex.GetVertexBorderNeighbors(info.Coord)); }
         private set { }
     }
 
     // Use this for initialization
     void Start() {
-
         Coloring.RandomizeColor(this.gameObject);
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 
 
 
     private void OnMouseDown() {
-        Debug.Log("Clicked on Vertex[" + coord.Cube.x + ", " + coord.Cube.y + ", " + coord.Cube.z + "], < " + coord.Index + " > ");
+        Debug.Log("Clicked on Vertex[" + info.Coord.Cube.x + ", " + info.Coord.Cube.y + ", " + info.Coord.Cube.z + "], < " + info.Coord.Index + " > ");
 
         if (Input.GetMouseButtonDown(0)) {
             ClickedEvent(this, true);
@@ -45,8 +41,11 @@ public class Vertex : Piece {
     }
     public void Initialize(Vector3Int _cube, int _index) {
         transform.name = "Vertex [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "], <" + _index + ">";
-        coord = new VertexCoord(_cube, _index);
-        transform.position = Layout.CubeToWorld(coord.Cube) + new Vector2(0.5f - _index, 0);
+        info.Coord = new VertexCoord(_cube, _index);
+        transform.position = Layout.CubeToWorld(info.Coord.Cube) + new Vector2(0.5f - _index, 0);
     }
 
+    public PieceInfo GetInfo() {
+        return info;
+    }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 class Map {
     public Cell[,] cells;
-    private Border[,][] borders;
-    private Vertex[,][] vertices;
+    public Border[,][] borders;
+    public Vertex[,][] vertices;
 
 }

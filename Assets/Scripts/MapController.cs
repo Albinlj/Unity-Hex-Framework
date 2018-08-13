@@ -16,10 +16,10 @@ public class MapController : MonoBehaviour {
     [SerializeField]
     public Cell[,] cells;
     [SerializeField]
-    private Border[,][] borders;
+    public Border[,][] borders;
     [SerializeField]
     public Vertex[,][] vertices;
-    private Map map;
+    private Map map = new Map();
 
 
     // Use this for initialization
@@ -186,19 +186,17 @@ public class MapController : MonoBehaviour {
 
     public void UpdateCoordInMap(Cell _cell) {
         Vector2Int offsetCoord = Hex.CellCubeToOffset(_cell.Coord);
-
         MapController.instance.cells[offsetCoord.x, offsetCoord.y] = _cell;
     }
+
     public void UpdateCoordInMap(Border _border) {
-
-        Vector2Int offsetCoord = Hex.CellCubeToOffset(_border.Coord.Cube);
-
-        MapController.instance.borders[offsetCoord.x, offsetCoord.y][_border.Coord.Index] = _border;
+        Vector2Int offsetCoord = Hex.CellCubeToOffset(_border.Info.Coord.Cube);
+        MapController.instance.borders[offsetCoord.x, offsetCoord.y][_border.Info.Coord.Index] = _border;
     }
-    public void UpdateCoordInMap(Vertex _vertex) {
-        Vector2Int offsetCoord = Hex.CellCubeToOffset(_vertex.Coord.Cube);
 
-        MapController.instance.vertices[offsetCoord.x, offsetCoord.y][_vertex.Coord.Index] = _vertex;
+    public void UpdateCoordInMap(Vertex _vertex) {
+        Vector2Int offsetCoord = Hex.CellCubeToOffset(_vertex.Info.Coord.Cube);
+        MapController.instance.vertices[offsetCoord.x, offsetCoord.y][_vertex.Info.Coord.Index] = _vertex;
     }
 
 }

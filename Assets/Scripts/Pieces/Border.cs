@@ -3,34 +3,23 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Border : Piece {
+public class Border : Piece, IHasInfo {
     //Fields
     [SerializeField]
-    private BorderCoord coord;
-    public BorderCoord Coord {
-        get { return coord; }
-        private set { }
+    private BorderInfo info = new BorderInfo();
+    public BorderInfo Info {
+        get { return info; }
+        set { info = value; }
     }
-
 
     //Event Actions
     static public event Action<Border> ClickedEvent;
-    //static public event Action<Border> EnterEvent;
-    //static public event Action<Border> ExitEvent;
-    //static public event Action<Border> UpEvent;
-
 
 
 
     // Use this for initialization
     void Start() {
-
         Coloring.RandomizeColor(gameObject);
-    }
-
-    // Update is called once per frame
-    void Update() {
-
     }
 
 
@@ -43,15 +32,15 @@ public class Border : Piece {
     }
 
     private void UpdatePosition() {
-        Vector2 position = Layout.CubeToWorld(coord.Cube) + Layout.CubeToWorld(Hex.cubeDirections[coord.Index]) / 2;
-        Quaternion rotation = Quaternion.AngleAxis(60 - 60 * coord.Index, Vector3.back);
+        Vector2 position = Layout.CubeToWorld(info.Coord.Cube) + Layout.CubeToWorld(Hex.cubeDirections[info.Coord.Index]) / 2;
+        Quaternion rotation = Quaternion.AngleAxis(60 - 60 * info.Coord.Index, Vector3.back);
 
         transform.SetPositionAndRotation(position, rotation);
     }
 
 
     private void UpdateCoord(BorderCoord _newCoord) {
-        coord = _newCoord;
+        info.Coord = _newCoord;
         int x = _newCoord.Cube.x;
         int y = _newCoord.Cube.y;
         int z = _newCoord.Cube.z;
@@ -63,14 +52,14 @@ public class Border : Piece {
     public Boolean RotateAround(Piece _piece, Boolean _clockwise) {
         if (_piece is Vertex) {
             Vertex vertex = (Vertex)_piece;
-            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundVertex(vertex.Coord, coord, _clockwise);
+            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundVertex(vertex.Info.Coord, Info.Coord, _clockwise);
             UpdateCoord(newCoord);
             UpdatePosition();
             return true;
         }
         else if (_piece is Cell) {
             Cell cell = (Cell)_piece;
-            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundCell(cell.Coord, coord, _clockwise);
+            BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundCell(cell.Coord, Info.Coord, _clockwise);
             UpdateCoord(newCoord);
             UpdatePosition();
             return true;
@@ -79,5 +68,8 @@ public class Border : Piece {
     }
 
 
+    public PieceInfo GetInfo() {
+        return info;
+    }
 
 }

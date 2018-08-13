@@ -71,14 +71,23 @@ static class MapBuilder {
 
         //Debug.Log(StringArray2d);
 
-
-
-
     }
 
-    public static Map LoadMap() {
-        string stringToLoad = PlayerPrefs.GetString("savedMap");
-        return JsonUtility.FromJson<Map>(stringToLoad);
+    public static SaveInfo SaveMap(MapController _mapController) {
+        SaveInfo saveInfo = new SaveInfo();
+        foreach (Cell cell in _mapController.cells) {
+            saveInfo.pieceInfoList.Add(cell.GetInfo());
+        }
+        foreach (Border[] borders in _mapController.borders) {
+            saveInfo.pieceInfoList.Add(borders[0].GetInfo());
+            saveInfo.pieceInfoList.Add(borders[1].GetInfo());
+            saveInfo.pieceInfoList.Add(borders[2].GetInfo());
+        }
+        foreach (Vertex[] vertices in _mapController.vertices) {
+            saveInfo.pieceInfoList.Add(vertices[0].GetInfo());
+            saveInfo.pieceInfoList.Add(vertices[1].GetInfo());
+        }
+        return saveInfo;
     }
 
 

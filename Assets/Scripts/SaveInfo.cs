@@ -3,6 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public enum PieceColor {
-    Red, Green, Blue
-};
+class SaveInfo {
+    public List<PieceInfo> pieceInfoList = new List<PieceInfo>();
+}
