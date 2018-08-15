@@ -24,7 +24,7 @@ public class Coloring {
                 newColor = Color.grey;
                 break;
         }
-        newColor.a = Random.Range(0, 5) > 2 ? 0 : 1;
+        newColor.a = Random.Range(0, 8) > 1 ? 0 : 1;
         ChangeColor(_gameObject, newColor);
     }
 

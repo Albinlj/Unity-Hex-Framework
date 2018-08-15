@@ -26,20 +26,19 @@ public class Border : Piece, IHasInfo {
     private void OnMouseDown() {
         ClickedEvent(this);
     }
-    public void Initialize(Vector3Int _cube, int _index) {
-        UpdateCoord(new BorderCoord(_cube, _index));
+    public void Initialize(BorderInfo _borderInfo) {
+        ChangeCoord(_borderInfo.Coord);
         UpdatePosition();
     }
 
     private void UpdatePosition() {
         Vector2 position = Layout.CubeToWorld(info.Coord.Cube) + Layout.CubeToWorld(Hex.cubeDirections[info.Coord.Index]) / 2;
         Quaternion rotation = Quaternion.AngleAxis(60 - 60 * info.Coord.Index, Vector3.back);
-
         transform.SetPositionAndRotation(position, rotation);
     }
 
 
-    private void UpdateCoord(BorderCoord _newCoord) {
+    private void ChangeCoord(BorderCoord _newCoord) {
         info.Coord = _newCoord;
         int x = _newCoord.Cube.x;
         int y = _newCoord.Cube.y;
@@ -53,14 +52,14 @@ public class Border : Piece, IHasInfo {
         if (_piece is Vertex) {
             Vertex vertex = (Vertex)_piece;
             BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundVertex(vertex.Info.Coord, Info.Coord, _clockwise);
-            UpdateCoord(newCoord);
+            ChangeCoord(newCoord);
             UpdatePosition();
             return true;
         }
         else if (_piece is Cell) {
             Cell cell = (Cell)_piece;
             BorderCoord newCoord = Hex.GetBorderCoordRotatedAroundCell(cell.Coord, Info.Coord, _clockwise);
-            UpdateCoord(newCoord);
+            ChangeCoord(newCoord);
             UpdatePosition();
             return true;
         }
@@ -68,7 +67,7 @@ public class Border : Piece, IHasInfo {
     }
 
 
-    public PieceInfo GetInfo() {
+    public IInfo GetInfo() {
         return info;
     }
 

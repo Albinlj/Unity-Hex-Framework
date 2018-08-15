@@ -12,7 +12,7 @@ public class MapController : MonoBehaviour {
     private GameObject cellHolder;
     private GameObject borderHolder;
     private GameObject vertexHolder;
-
+    private Validator validator;
 
     private Map map = new Map();
 
@@ -48,7 +48,7 @@ public class MapController : MonoBehaviour {
 
 
     public void CreateRectMap(int _width, int _height) {
-
+        validator = new Validator(_width + 2, _height + 2);
         //Creates cells, borders, and vertexes for the wanted cells, and an 
         //additional layer outside in order to get the needed Vertices and Borders.
         //Items are stored as offset in an Array where 
@@ -62,22 +62,22 @@ public class MapController : MonoBehaviour {
                 Vector3Int cube = Hex.CellOffsetToCube(offset);
 
                 //Instantiates a Cell
-                if (isValidCoord(cube)) {
+                if (validator.isValidCoord(cube)) {
                     GameObject newCellObj = Instantiate(cellPrefab);
                     Cell newCell = newCellObj.GetComponent<Cell>();
                     newCell.transform.SetParent(cellHolder.transform);
-                    newCell.Initialize(cube);
+                    newCell.Initialize(new CellInfo(cube));
                 }
 
                 //Instantiates a Border if it has a neighboring Cell 
                 Border[] newBorderArray = new Border[3];
                 map.borders[x, y] = newBorderArray;
                 for (int i = 0; i < 3; i++) {
-                    if (hasValidCoord(Hex.GetBorderCellNeighbors(cube, i))) {
+                    if (validator.hasValidCoord(Hex.GetBorderCellNeighbors(cube, i))) {
                         GameObject newBorderObj = Instantiate(borderPrefab);
                         Border newBorder = newBorderObj.GetComponent<Border>();
                         newBorder.transform.SetParent(borderHolder.transform);
-                        newBorder.Initialize(cube, i);
+                        newBorder.Initialize(new BorderInfo(cube, i));
                     }
                 }
 
@@ -85,27 +85,43 @@ public class MapController : MonoBehaviour {
                 Vertex[] newVertexArray = new Vertex[2];
                 map.vertices[x, y] = newVertexArray;
                 for (int i = 0; i < 2; i++) {
-                    if (hasValidCoord(Hex.GetVertexCellNeighbors(cube, i))) {
+                    if (validator.hasValidCoord(Hex.GetVertexCellNeighbors(cube, i))) {
 
                         GameObject newVertexObj = Instantiate(vertexPrefab);
                         Vertex newVertex = newVertexObj.GetComponent<Vertex>();
                         newVertex.transform.SetParent(vertexHolder.transform);
-                        newVertex.Initialize(cube, i);
+                        newVertex.Initialize(new VertexInfo(cube, i));
                     }
                 }
             }
         }
 
         CameraController.instance.UpdateCamera(_width, _height);
-
-        MapBuilder.Testing();
-
+        BlueprintHandler.MakeBluePrintFromMap(map);
+        Serializer.SerializeBlueprint(BlueprintHandler.MakeBluePrintFromMap(map), "Test");
     }
 
+    public void LoadBlueprint(Blueprint _blueprint) {
+        foreach (CellInfo cellInfo in _blueprint.cellInfoList) {
+            GameObject newCellObj = Instantiate(cellPrefab);
+            Cell newCell = newCellObj.GetComponent<Cell>();
+            newCell.Initialize(cellInfo);
+        }
+        foreach (BorderInfo borderInfo in _blueprint.borderInfoList) {
+            GameObject newBorderObj = Instantiate(borderPrefab);
+            Border newBorder = newBorderObj.GetComponent<Border>();
+            newBorder.Initialize(borderInfo);
+        }
+        foreach (VertexInfo vertexInfo in _blueprint.vertexInfoList) {
+            GameObject newVertexObj = Instantiate(vertexPrefab);
+            Vertex newVertex = newVertexObj.GetComponent<Vertex>();
+            newVertex.Initialize(vertexInfo);
+        }
+    }
 
     //Getting Cells from offsets or cubes, or a list of cubes.
     private Cell GetCell(Vector2Int _offset) {
-        if (isValidCoord(_offset)) {
+        if (validator.isValidCoord(_offset)) {
             return map.cells[_offset.x, _offset.y];
         }
         else {
@@ -144,38 +160,6 @@ public class MapController : MonoBehaviour {
 
 
 
-    //Checks if a coord or a list of coords is inside the playarea
-    public bool isValidCoord(Vector2Int _offset) {
-        if (1 <= _offset.x && _offset.x <= map.cells.GetLength(0) - 2 && 1 <= _offset.y && _offset.y <= map.cells.GetLength(1) - 2) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public bool isValidCoord(Vector3Int _cube) {
-        return isValidCoord(Hex.CellCubeToOffset(_cube));
-    }
-
-    public bool isValidCoord(List<Vector3Int> _cubeList) {
-        foreach (Vector3Int _cube in _cubeList) {
-            if (!isValidCoord(_cube)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //Checks a list of coords to see if it has one or more coords inside the playarea.
-    public bool hasValidCoord(List<Vector3Int> _cubeList) {
-        foreach (Vector3Int _cube in _cubeList) {
-            if (isValidCoord(_cube)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 
 
@@ -194,5 +178,6 @@ public class MapController : MonoBehaviour {
         map.vertices[offsetCoord.x, offsetCoord.y][_vertex.Info.Coord.Index] = _vertex;
     }
 
-}
 
+
+}

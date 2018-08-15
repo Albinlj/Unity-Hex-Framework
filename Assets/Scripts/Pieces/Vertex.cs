@@ -39,13 +39,26 @@ public class Vertex : Piece, IHasInfo {
 
         }
     }
-    public void Initialize(Vector3Int _cube, int _index) {
-        transform.name = "Vertex [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "], <" + _index + ">";
-        info.Coord = new VertexCoord(_cube, _index);
-        transform.position = Layout.CubeToWorld(info.Coord.Cube) + new Vector2(0.5f - _index, 0);
+    public void Initialize(VertexInfo _newInfo) {
+        ChangeCoord(_newInfo);
+        UpdatePosition();
     }
 
-    public PieceInfo GetInfo() {
+    private void UpdatePosition() {
+        transform.position = Layout.CubeToWorld(info.Coord.Cube) + new Vector2(0.5f - info.Coord.Index, 0);
+    }
+
+    private void ChangeCoord(VertexInfo _vertexInfo) {
+        VertexCoord newCoord = _vertexInfo.Coord;
+        info.Coord = newCoord;
+        int x = newCoord.Cube.x;
+        int y = newCoord.Cube.y;
+        int z = newCoord.Cube.z;
+        transform.name = "Vertex [" + x + ", " + y + ", " + z + "]" + "<" + newCoord.Index + ">";
+        MapController.instance.UpdateCoordInMap(this);
+    }
+
+    public IInfo GetInfo() {
         return info;
     }
 }

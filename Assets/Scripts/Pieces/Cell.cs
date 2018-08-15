@@ -49,14 +49,25 @@ public class Cell : Piece, IHasInfo {
     }
 
     //Is called after Instantiation, kind of like a constructor.
-    public void Initialize(Vector3Int _cube) {
-        transform.name = "Cell [" + _cube.x + ", " + _cube.y + ", " + _cube.z + "]";
-        info.Coord = _cube;
-        transform.position = Layout.CubeToWorld(_cube);
+    public void Initialize(CellInfo _cellInfo) {
+        ChangeCoord(_cellInfo);
+        UpdatePosition(_cellInfo);
     }
 
+    private void UpdatePosition(CellInfo _cellInfo) {
+        transform.position = Layout.CubeToWorld(_cellInfo.Coord);
+    }
 
-    public PieceInfo GetInfo() {
+    private void ChangeCoord(CellInfo _cellInfo) {
+        info = _cellInfo;
+        int x = _cellInfo.Coord.x;
+        int y = _cellInfo.Coord.y;
+        int z = _cellInfo.Coord.z;
+        transform.name = "Cell [" + x + ", " + y + ", " + z + "]";
+        MapController.instance.UpdateCoordInMap(this);
+    }
+
+    public IInfo GetInfo() {
         return info;
     }
 }

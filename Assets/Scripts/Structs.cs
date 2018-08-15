@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+[Serializable]
+
 public struct BorderCoord {
-    Vector3Int cube;
-    int index;
+    [SerializeField]
+    private Vector3Int cube;
+    [SerializeField]
+    private int index;
 
     public BorderCoord(Vector3Int _cube, int _index) {
         cube = _cube;
@@ -16,7 +20,7 @@ public struct BorderCoord {
 
     public Vector3Int Cube {
         get { return cube; }
-        private set { }
+        set { cube = value; }
     }
 
     public int Index {
@@ -34,10 +38,12 @@ public struct BorderCoord {
 }
 
 
-
+[Serializable]
 public struct VertexCoord {
-    Vector3Int cube;
-    int index;
+    [SerializeField]
+    private Vector3Int cube;
+    [SerializeField]
+    private int index;
 
     public VertexCoord(Vector3Int _cube, int _index) {
         cube = _cube;

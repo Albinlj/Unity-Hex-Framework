@@ -4,10 +4,10 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class Piece : MonoBehaviour {
+public abstract class Piece : MonoBehaviour {
 
-    static public event Action<Piece> PieceClickedEvent;
-    static public event Action<Piece> PieceMovedEvent;
+    //static public event Action<Piece> PieceClickedEvent;
+    //static public event Action<Piece> PieceMovedEvent;
 
     // Use this for initialization
     void Start() {

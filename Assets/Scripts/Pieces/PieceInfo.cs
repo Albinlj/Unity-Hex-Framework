@@ -6,6 +6,8 @@ using UnityEngine;
 
 [Serializable]
 public class PieceInfo {
+    [SerializeField]
+
     private PieceColor color;
     public PieceColor Color {
         get { return color; }
@@ -13,16 +15,32 @@ public class PieceInfo {
     }
 }
 
-public class CellInfo : PieceInfo {
 
+
+[Serializable]
+public class CellInfo : PieceInfo, IInfo {
+    [SerializeField]
     private Vector3Int coord;
     public Vector3Int Coord {
         get { return coord; }
         set { coord = value; }
     }
+
+    public CellInfo(Vector3Int _coord) {
+        coord = _coord;
+    }
+
+    public CellInfo() {
+
+    }
+
 }
 
-public class BorderInfo : PieceInfo {
+
+
+[Serializable]
+public class BorderInfo : PieceInfo, IInfo {
+    [SerializeField]
 
     private BorderCoord coord;
     public BorderCoord Coord {
@@ -30,14 +48,37 @@ public class BorderInfo : PieceInfo {
         set { coord = value; }
     }
 
+    public BorderInfo(BorderCoord _borderCoord) {
+        coord = _borderCoord;
+    }
+    public BorderInfo(Vector3Int _cubeCoord, int _index) {
+        coord = new BorderCoord(_cubeCoord, _index);
+    }
+    public BorderInfo() {
 
-
+    }
 }
-public class VertexInfo : PieceInfo {
+
+
+
+[Serializable]
+public class VertexInfo : PieceInfo, IInfo {
+    [SerializeField]
 
     private VertexCoord coord;
     public VertexCoord Coord {
         get { return coord; }
         set { coord = value; }
+    }
+
+    public VertexInfo(VertexCoord _vertexCoord) {
+        coord = _vertexCoord;
+    }
+    public VertexInfo(Vector3Int _cube, int _index) {
+        coord = new VertexCoord(_cube, _index);
+    }
+
+    public VertexInfo() {
+
     }
 }
