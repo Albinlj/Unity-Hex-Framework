@@ -27,7 +27,7 @@ public class Cell : Piece, IHasInfo {
     }
 
     public List<Border> Borders {
-        get { return MapController.instance.GetBorders(Hex.GetCellBorderNeighbors(info.Coord)); }
+        get { return MapController.Instance.GetBorders(Hex.GetCellBorderNeighbors(info.Coord)); }
         private set { }
     }
 
@@ -40,11 +40,6 @@ public class Cell : Piece, IHasInfo {
     //Eventhandlers
     private void OnMouseDown() {
         ClickedEvent(this, true);
-        Debug.Log(Coord);
-
-        string jsonified = JsonUtility.ToJson(this);
-        File.WriteAllText("Assets/strutz.txt", jsonified);
-
 
     }
 
@@ -64,7 +59,7 @@ public class Cell : Piece, IHasInfo {
         int y = _cellInfo.Coord.y;
         int z = _cellInfo.Coord.z;
         transform.name = "Cell [" + x + ", " + y + ", " + z + "]";
-        MapController.instance.UpdateCoordInMap(this);
+        MapController.Instance.UpdateCoordInMap(this);
     }
 
     public IInfo GetInfo() {

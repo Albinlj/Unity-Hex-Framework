@@ -44,7 +44,7 @@ public class Border : Piece, IHasInfo {
         int y = _newCoord.Cube.y;
         int z = _newCoord.Cube.z;
         transform.name = "Border [" + x + ", " + y + ", " + z + "]" + "<" + _newCoord.Index + ">";
-        MapController.instance.UpdateCoordInMap(this);
+        MapController.Instance.UpdateCoordInMap(this);
     }
 
 

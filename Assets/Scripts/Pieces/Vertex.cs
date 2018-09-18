@@ -16,7 +16,7 @@ public class Vertex : Piece, IHasInfo {
     static public event Action<Vertex, Boolean> ClickedEvent;
 
     public List<Border> Borders {
-        get { return MapController.instance.GetBorders(Hex.GetVertexBorderNeighbors(info.Coord)); }
+        get { return MapController.Instance.GetBorders(Hex.GetVertexBorderNeighbors(info.Coord)); }
         private set { }
     }
 
@@ -55,7 +55,7 @@ public class Vertex : Piece, IHasInfo {
         int y = newCoord.Cube.y;
         int z = newCoord.Cube.z;
         transform.name = "Vertex [" + x + ", " + y + ", " + z + "]" + "<" + newCoord.Index + ">";
-        MapController.instance.UpdateCoordInMap(this);
+        MapController.Instance.UpdateCoordInMap(this);
     }
 
     public IInfo GetInfo() {

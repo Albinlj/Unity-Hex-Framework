@@ -7,6 +7,12 @@ using UnityEngine;
 [Serializable]
 public class PieceInfo {
     [SerializeField]
+    private bool isOn;
+
+    public bool IsOn {
+        get { return isOn; }
+        set { isOn = value; }
+    }
 
     private PieceColor color;
     public PieceColor Color {

@@ -11,15 +11,16 @@ public static class Serializer {
 
     public static string SerializeBlueprint(Blueprint _blueprint, string _filename) {
         string json = JsonUtility.ToJson(_blueprint, true);
-        Debug.Log(json);
+        Debug.Log("Serialized text = " + json);
         string path = folder + _filename + ".json";
-        File.WriteAllText("Assets/Text/saveJsonTest.json", json);
+        File.WriteAllText(path, json);
         return json;
     }
 
     public static Blueprint DeserializeBlueprint(string _filename) {
         string path = folder + _filename + ".json";
-        Blueprint deserializedBlueprint = JsonUtility.FromJson<Blueprint>(path);
+        string json = File.ReadAllText(path);
+        Blueprint deserializedBlueprint = JsonUtility.FromJson<Blueprint>(json);
         return deserializedBlueprint;
     }
 }

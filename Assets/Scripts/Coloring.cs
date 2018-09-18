@@ -24,7 +24,6 @@ public class Coloring {
                 newColor = Color.grey;
                 break;
         }
-        newColor.a = Random.Range(0, 8) > 1 ? 0 : 1;
         ChangeColor(_gameObject, newColor);
     }
 
@@ -34,6 +33,10 @@ public class Coloring {
         if (renderer != null) {
             renderer.color = _color;
         }
+    }
+
+    public static void ChangeColor(Piece _piece, PieceColor _color) {
+
     }
 
     public static Color GetColor(GameObject _gameObject) {

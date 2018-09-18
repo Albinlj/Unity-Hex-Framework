@@ -1,0 +1,257 @@
+{
+    "width": 4,
+    "height": 3,
+    "cellInfoList": [
+        {
+            "isOn": false,
+            "coord": {
+                "x": 1,
+                "y": 1,
+                "z": -2
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "x": 2,
+                "y": 0,
+                "z": -2
+            }
+        }
+    ],
+    "borderInfoList": [
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 0,
+                    "y": 1,
+                    "z": -1
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 0,
+                    "z": -1
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 0,
+                    "z": -1
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -2
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -2
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -2
+                },
+                "index": 2
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": -1,
+                    "z": -1
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 0,
+                    "z": -2
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 0,
+                    "z": -2
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 0,
+                    "z": -2
+                },
+                "index": 2
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 3,
+                    "y": -1,
+                    "z": -2
+                },
+                "index": 2
+            }
+        }
+    ],
+    "vertexInfoList": [
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 0,
+                    "y": 1,
+                    "z": -1
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 0,
+                    "y": 2,
+                    "z": -2
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 0,
+                    "z": -1
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -2
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 1,
+                    "y": 1,
+                    "z": -2
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 0,
+                    "z": -2
+                },
+                "index": 0
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 0,
+                    "z": -2
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 2,
+                    "y": 1,
+                    "z": -3
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 3,
+                    "y": 0,
+                    "z": -3
+                },
+                "index": 1
+            }
+        },
+        {
+            "isOn": false,
+            "coord": {
+                "cube": {
+                    "x": 3,
+                    "y": 0,
+                    "z": -3
+                },
+                "index": 1
+            }
+        }
+    ]
+}
