@@ -1,29 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts.Pieces;
 using UnityEngine;
-using System;
 
-
-public static class Moves {
-
-
-    public static void DeleteVertexBorders(Vertex _vertex) {
-        foreach (Border border in _vertex.Borders) {
-
-            MonoBehaviour.Destroy(border.gameObject);
+namespace Assets.Scripts
+{
+    public static class Moves
+    {
+        public static void DeleteVertexBorders(Vertex vertex)
+        {
+            foreach (Border border in vertex.Borders)
+            {
+                MonoBehaviour.Destroy(border.gameObject);
+            }
         }
-    }
 
-
-    public static void RotateVertexBorders(Vertex _vertex, bool _clockwise) {
-        foreach (Border border in _vertex.Borders) {
-            border.RotateAround(_vertex, _clockwise);
+        public static void RotateVertexBorders(Vertex vertex, bool clockwise)
+        {
+            foreach (Border border in vertex.Borders)
+            {
+                border.RotateAround(vertex, clockwise);
+            }
         }
-    }
 
-    internal static void RotateCellBorders(Cell _cell, bool _clockwise) {
-        foreach (Border border in _cell.Borders) {
-            border.RotateAround(_cell, _clockwise);
+        internal static void RotateCellBorders(Cell cell, bool clockwise)
+        {
+            foreach (Border border in cell.Borders)
+            {
+                border.RotateAround(cell, clockwise);
+            }
         }
     }
 }

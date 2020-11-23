@@ -1,26 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class CameraController : Singleton<CameraController> {
-    public Camera myCamera;
-    public float padding;
+namespace Assets.Scripts.Controllers
+{
+    public class CameraController : Singleton<CameraController>
+    {
+        public Camera myCamera;
+        public float padding;
 
+        // Use this for initialization
 
-    // Use this for initialization
+        private void Start()
+        {
+            padding = Layout.RadiusInner;
+        }
 
-    void Start() {
-        padding = Layout.RadiusInner;
-    }
+        // Update is called once per frame
+        private void Update()
+        {
+        }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
-    public void UpdateCamera(int width, int heigth) {
-        myCamera.transform.position = new Vector3((width) * Layout.RadiusInner, (heigth + 1.5f) * Layout.RadiusInner, -1);
-        myCamera.orthographicSize = (heigth + .5f) * Layout.RadiusInner + padding;
-        myCamera.ResetAspect();
+        public void UpdateCamera(int width, int heigth)
+        {
+            myCamera.transform.position = new Vector3((width) * Layout.RadiusInner, (heigth + 1.5f) * Layout.RadiusInner, -1);
+            myCamera.orthographicSize = (heigth + .5f) * Layout.RadiusInner + padding;
+            myCamera.ResetAspect();
+        }
     }
 }

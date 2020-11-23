@@ -1,68 +1,49 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Coords;
 using System.Collections.Generic;
-using System.Linq;
-using System;
-using System.IO;
 using UnityEngine;
 
-public class Cell : Piece, IHasInfo {
+namespace Assets.Scripts.Pieces
+{
+    public class Cell : Piece
+    {
+        [SerializeField] private CellInfo info;
 
-    //Event Actions
-    static public event Action<Cell, bool> ClickedEvent;
+        public CellInfo Info
+        {
+            get => info;
+            set => info = value;
+        }
 
-    [SerializeField]
-    private CellInfo info = new CellInfo();
-    public CellInfo Info {
-        get { return info; }
-        set { info = value; }
-    }
+        private PolygonCollider2D polyCollider;
 
-    private PolygonCollider2D polyCollider;
+        //Properties
 
-    //Properties
+        public AxialCoord Coord
+        {
+            get => info.Coord;
+            private set => info.Coord = value;
+        }
 
-    public Vector3Int Coord {
-        get { return info.Coord; }
-        private set { }
-    }
+        public IEnumerable<Border> Borders => MapController.Instance.GetBorders(info.Coord.Borders);
 
-    public List<Border> Borders {
-        get { return MapController.Instance.GetBorders(Hex.GetCellBorderNeighbors(info.Coord)); }
-        private set { }
-    }
+        private void Start()
+        {
+            Coloring.RandomizeColor(gameObject);
+            polyCollider = gameObject.GetComponent<PolygonCollider2D>();
+        }
 
-    //Use this for initialization
-    private void Start() {
-        Coloring.RandomizeColor(gameObject);
-        polyCollider = gameObject.GetComponent<PolygonCollider2D>();
-    }
+        public void Initialize(CellInfo cellInfo)
+        {
+            ChangeCoord(cellInfo);
+            UpdatePosition(cellInfo);
+        }
 
-    //Eventhandlers
-    private void OnMouseDown() {
-        ClickedEvent(this, true);
+        private void UpdatePosition(CellInfo cellInfo) => transform.position = Layout.AxialToWorld(cellInfo.Coord);
 
-    }
-
-    //Is called after Instantiation, kind of like a constructor.
-    public void Initialize(CellInfo _cellInfo) {
-        ChangeCoord(_cellInfo);
-        UpdatePosition(_cellInfo);
-    }
-
-    private void UpdatePosition(CellInfo _cellInfo) {
-        transform.position = Layout.CubeToWorld(_cellInfo.Coord);
-    }
-
-    private void ChangeCoord(CellInfo _cellInfo) {
-        info = _cellInfo;
-        int x = _cellInfo.Coord.x;
-        int y = _cellInfo.Coord.y;
-        int z = _cellInfo.Coord.z;
-        transform.name = "Cell [" + x + ", " + y + ", " + z + "]";
-        MapController.Instance.UpdateCoordInMap(this);
-    }
-
-    public IInfo GetInfo() {
-        return info;
+        private void ChangeCoord(CellInfo cellInfo)
+        {
+            info = cellInfo;
+            MapController.Instance.UpdateCoordInMap(this);
+        }
     }
 }

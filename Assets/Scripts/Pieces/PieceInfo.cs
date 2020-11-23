@@ -1,90 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Assets.Scripts.Coords;
+using System;
 using UnityEngine;
 
-[Serializable]
-public class PieceInfo {
-    [SerializeField]
-    private bool isOn;
+namespace Assets.Scripts.Pieces
+{
+    public class PieceInfo
+    {
+        private bool isOn;
 
-    public bool IsOn {
-        get { return isOn; }
-        set { isOn = value; }
+        public bool IsOn
+        {
+            get => isOn;
+            set => isOn = value;
+        }
+
+        private PieceColor color;
+
+        public PieceColor Color
+        {
+            get => color;
+            set => color = value;
+        }
     }
 
-    private PieceColor color;
-    public PieceColor Color {
-        get { return color; }
-        set { color = value; }
-    }
-}
+    [Serializable]
+    public class CellInfo : PieceInfo, IInfo
+    {
+        [field: SerializeField]
+        public AxialCoord Coord { get; set; }
 
+        public CellInfo(AxialCoord coord)
+        {
+            Coord = coord;
+        }
 
-
-[Serializable]
-public class CellInfo : PieceInfo, IInfo {
-    [SerializeField]
-    private Vector3Int coord;
-    public Vector3Int Coord {
-        get { return coord; }
-        set { coord = value; }
+        public CellInfo()
+        {
+        }
     }
 
-    public CellInfo(Vector3Int _coord) {
-        coord = _coord;
+    [Serializable]
+    public class BorderInfo : PieceInfo, IInfo
+    {
+        [SerializeField]
+        private BorderCoord coord;
+
+        public BorderCoord Coord
+        {
+            get => coord;
+            set => coord = value;
+        }
+
+        public BorderInfo(BorderCoord borderCoord)
+        {
+            coord = borderCoord;
+        }
+
+        public BorderInfo(AxialCoord axial, int index)
+        {
+            coord = new BorderCoord(axial, index);
+        }
     }
 
-    public CellInfo() {
+    [Serializable]
+    public class VertexInfo : PieceInfo, IInfo
+    {
+        [SerializeField]
+        private VertexCoord coord;
 
-    }
+        public VertexCoord Coord
+        {
+            get => coord;
+            set => coord = value;
+        }
 
-}
+        public VertexInfo(VertexCoord vertexCoord)
+        {
+            coord = vertexCoord;
+        }
 
-
-
-[Serializable]
-public class BorderInfo : PieceInfo, IInfo {
-    [SerializeField]
-
-    private BorderCoord coord;
-    public BorderCoord Coord {
-        get { return coord; }
-        set { coord = value; }
-    }
-
-    public BorderInfo(BorderCoord _borderCoord) {
-        coord = _borderCoord;
-    }
-    public BorderInfo(Vector3Int _cubeCoord, int _index) {
-        coord = new BorderCoord(_cubeCoord, _index);
-    }
-    public BorderInfo() {
-
-    }
-}
-
-
-
-[Serializable]
-public class VertexInfo : PieceInfo, IInfo {
-    [SerializeField]
-
-    private VertexCoord coord;
-    public VertexCoord Coord {
-        get { return coord; }
-        set { coord = value; }
-    }
-
-    public VertexInfo(VertexCoord _vertexCoord) {
-        coord = _vertexCoord;
-    }
-    public VertexInfo(Vector3Int _cube, int _index) {
-        coord = new VertexCoord(_cube, _index);
-    }
-
-    public VertexInfo() {
-
+        public VertexInfo(Vector3Int cube, int index)
+        {
+            coord = new VertexCoord((Vector2Int)cube, index);
+        }
     }
 }

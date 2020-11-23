@@ -1,19 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿namespace Assets.Scripts.Controllers
+{
+    public class GameController : Singleton<GameController>
+    {
+        private void Start()
+        {
+            MapController.Instance.LoadBlueprint(BlueprintHandler.CreateRectangularBlueprint(8, 6));
 
-public class GameController : Singleton<GameController> {
-
-
-    void Start() {
-
-
-        MapController.Instance.LoadBlueprint(BlueprintHandler.CreateRectangularBlueprint(4, 3));
-
-        Vertex.ClickedEvent += Moves.RotateVertexBorders;
-        Cell.ClickedEvent += Moves.RotateCellBorders;
-
+            //Vertex.ClickedEvent += Moves.RotateVertexBorders;
+            //Cell.ClickedEvent += Moves.RotateCellBorders;
+        }
     }
-
-
-
 }
