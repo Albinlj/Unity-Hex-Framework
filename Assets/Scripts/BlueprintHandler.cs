@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Coords;
 using Assets.Scripts.Pieces;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
@@ -46,7 +47,8 @@ namespace Assets.Scripts
         public static Blueprint CreateRectangularBlueprint(int width, int height)
         {
             Validator validator = new Validator(width, height);
-            Blueprint newBluePrint = new Blueprint();
+            Blueprint newBluePrint = ScriptableObject.CreateInstance<Blueprint>();
+            //new Blueprint();
             newBluePrint.width = width;
             newBluePrint.height = height;
             //Creates cells, borders, and vertexes for the wanted cells, and an
@@ -60,26 +62,22 @@ namespace Assets.Scripts
 
                     if (validator.IsValidCoord(coord))
                     {
-                        var newCellInfo = new CellInfo(coord);
+                        var newCellInfo = new CellInfo((AxialCoord)coord);
                         newBluePrint.cellInfoList.Add(newCellInfo);
                     }
 
                     for (int i = 0; i < 3; i++)
                     {
-                        //if (validator.IsValidCoord(coord.Neighbors[i]))
-                        //{
+                        if (!validator.IsValidCoord(coord.Neighbors[i])) continue;
                         var newBorderInfo = new BorderInfo(coord, i);
                         newBluePrint.borderInfoList.Add(newBorderInfo);
-                        //}
                     }
 
                     for (int i = 0; i < 2; i++)
                     {
-                        //if (validator.HasValidCoord(coord Hex.GetVertexCellNeighbors(cube, i)))
-                        {
-                            var newVertexInfo = new VertexInfo(coord, i);
-                            newBluePrint.vertexInfoList.Add(newVertexInfo);
-                        }
+                        if (!validator.IsValidCoord(coord.Neighbors[i])) continue;
+                        var newVertexInfo = new VertexInfo(coord, i);
+                        newBluePrint.vertexInfoList.Add(newVertexInfo);
                     }
                 }
             }

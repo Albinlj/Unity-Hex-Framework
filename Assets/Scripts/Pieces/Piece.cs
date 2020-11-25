@@ -8,13 +8,20 @@ namespace Assets.Scripts.Pieces
     [Serializable]
     public abstract class Piece : MonoBehaviour
     {
-        private List<PieceAction> Actions = new List<PieceAction>();
-
         //static public event Action<Piece> PieceClickedEvent;
         //static public event Action<Piece> PieceMovedEvent;
-        public static event Action<Piece, bool> ClickedEvent;
 
-        private void OnMouseDown() => ClickedEvent?.Invoke(this, true);
+        [SerializeField]
+        private List<PieceAction> OnMouseActions = new List<PieceAction>();
+
+        private void OnMouseDown()
+        {
+            foreach (var action in OnMouseActions)
+            {
+                if (action != null)
+                    action.Execute(this);
+            }
+        }
 
         // Use this for initialization
         private void Start()

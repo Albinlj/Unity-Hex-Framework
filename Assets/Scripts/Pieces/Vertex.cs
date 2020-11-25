@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.Coords;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -19,13 +18,14 @@ namespace Assets.Scripts.Pieces
             UpdatePosition();
         }
 
-        private void UpdatePosition() => transform.position = Layout.AxialToWorld(Info.Coord.Axial) + new Vector2(0.5f - Info.Coord.Index, 0);
+        private void UpdatePosition() => transform.position = Info.Coord.Axial.ToWorldPosition() + new Vector2(0.5f - Info.Coord.Index, 0);
 
         private void ChangeCoord(VertexInfo vertexInfo)
         {
-            VertexCoord newCoord = vertexInfo.Coord;
-            Info.Coord = newCoord;
-            transform.name = $"Vertex {newCoord}";
+            //var newCoord = vertexInfo.Coord;
+            //Info.Coord = newCoord;
+            Info = vertexInfo;
+            transform.name = $"Vertex {Info}";
             MapController.Instance.UpdateCoordInMap(this);
         }
     }

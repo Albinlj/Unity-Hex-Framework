@@ -37,7 +37,7 @@ namespace Assets.Scripts.Pieces
 
         private void UpdatePosition()
         {
-            Vector2 position = Layout.AxialToWorld(info.Coord.Axial) + Layout.AxialToWorld(Directions.HexDirections[info.Coord.Index]) / 2;
+            Vector2 position = info.Coord.Axial.ToWorldPosition() + Directions.HexDirections[info.Coord.Index].ToWorldPosition() / 2;
             Quaternion rotation = Quaternion.AngleAxis(60 - 60 * info.Coord.Index, Vector3.back);
             transform.SetPositionAndRotation(position, rotation);
         }

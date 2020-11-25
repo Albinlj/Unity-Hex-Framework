@@ -38,7 +38,7 @@ namespace Assets.Scripts.Pieces
             UpdatePosition(cellInfo);
         }
 
-        private void UpdatePosition(CellInfo cellInfo) => transform.position = Layout.AxialToWorld(cellInfo.Coord);
+        private void UpdatePosition(CellInfo cellInfo) => transform.position = cellInfo.Coord.ToWorldPosition();
 
         private void ChangeCoord(CellInfo cellInfo)
         {
