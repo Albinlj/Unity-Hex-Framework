@@ -9,17 +9,17 @@ namespace Assets.Scripts
         {
             foreach (Border border in vertex.Borders)
             {
-                MonoBehaviour.Destroy(border.gameObject);
+                Object.Destroy(border.gameObject);
             }
         }
 
-        public static void RotateVertexBorders(Vertex vertex, bool clockwise)
-        {
-            foreach (Border border in vertex.Borders)
-            {
-                border.RotateAround(vertex, clockwise);
-            }
-        }
+        //public static void RotateVertexBorders(Vertex vertex, bool clockwise)
+        //{
+        //    foreach (Border border in vertex.Borders)
+        //    {
+        //        border.RotateAround(vertex, clockwise);
+        //    }
+        //}
 
         internal static void RotateCellBorders(Cell cell, bool clockwise)
         {

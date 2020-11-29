@@ -29,9 +29,11 @@ namespace Assets.Scripts.Coords
 
         #region operators
 
+        public static readonly float innerRadius = (float)Math.Sqrt(3) / 2;
+
         public override string ToString() => $"Axial [{X}, {Y}]";
 
-        public static implicit operator Vector2Int(AxialCoord hc) => new Vector2Int(hc.X, hc.Y);
+        public static explicit operator Vector2(AxialCoord hc) => new Vector2((float)Math.Cos(Math.PI / 6f) * hc.X * innerRadius, (hc.Y + (float)hc.X / 2) * innerRadius);
 
         public static implicit operator AxialCoord(Vector2Int vti) => new AxialCoord(vti.x, vti.y);
 
@@ -39,25 +41,13 @@ namespace Assets.Scripts.Coords
 
         public static implicit operator AxialCoord(Vector3Int vti) => new AxialCoord(vti.x, vti.y);
 
-        public static AxialCoord operator +(AxialCoord hc1, AxialCoord hc2)
-        {
-            return new AxialCoord(hc1.X + hc2.X, hc1.Y + hc2.Y);
-        }
+        public static AxialCoord operator +(AxialCoord hc1, AxialCoord hc2) => new AxialCoord(hc1.X + hc2.X, hc1.Y + hc2.Y);
 
-        public static AxialCoord operator -(AxialCoord hc1, AxialCoord hc2)
-        {
-            return new AxialCoord(hc1.X - hc2.X, hc1.Y - hc2.Y);
-        }
+        public static AxialCoord operator -(AxialCoord hc1, AxialCoord hc2) => new AxialCoord(hc1.X - hc2.X, hc1.Y - hc2.Y);
 
-        public static bool operator ==(AxialCoord hc1, AxialCoord hc2)
-        {
-            return hc1.X == hc2.X && hc1.Y == hc2.Y;
-        }
+        public static bool operator ==(AxialCoord hc1, AxialCoord hc2) => hc1.X == hc2.X && hc1.Y == hc2.Y;
 
-        public static bool operator !=(AxialCoord hc1, AxialCoord hc2)
-        {
-            return hc1.X != hc2.X || hc1.Y == hc2.Y;
-        }
+        public static bool operator !=(AxialCoord hc1, AxialCoord hc2) => hc1.X != hc2.X || hc1.Y == hc2.Y;
 
         #endregion operators
 

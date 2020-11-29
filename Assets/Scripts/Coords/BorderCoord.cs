@@ -13,11 +13,45 @@ namespace Assets.Scripts.Coords
         [field: SerializeField]
         public int Index { get; private set; }
 
-        public BorderCoord(AxialCoord axial, int index)
+        public BorderCoord(AxialCoord axial, int index) : this(axial.X, axial.Y, index)
         {
-            Axial = axial;
-            Index = index;
         }
+
+        public BorderCoord(int x, int y, int index)
+        {
+            var axialCoord = new AxialCoord(x, y);
+            switch (index)
+            {
+                case 0:
+                case 1:
+                case 2:
+                    Axial = axialCoord;
+                    Index = index;
+                    break;
+
+                case 3:
+                    Axial = axialCoord.Neighbors[3];
+                    Index = 0;
+                    break;
+
+                case 4:
+                    Axial = axialCoord.Neighbors[4];
+                    Index = 1;
+                    break;
+
+                case 5:
+                    Axial = axialCoord.Neighbors[5];
+                    Index = 2;
+                    break;
+
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        public static implicit operator Vector2(BorderCoord bc) => (Vector2)bc.Axial + (Vector2)HexDirections[bc.Index] / 2;
+
+        public static explicit operator Quaternion(BorderCoord bc) => Quaternion.AngleAxis(60 - 60 * bc.Index, Vector3.back);
 
         public BorderCoord[] Neighbors
         {

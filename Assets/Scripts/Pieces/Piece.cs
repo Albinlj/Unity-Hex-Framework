@@ -12,25 +12,20 @@ namespace Assets.Scripts.Pieces
         //static public event Action<Piece> PieceMovedEvent;
 
         [SerializeField]
-        private List<PieceAction> OnMouseActions = new List<PieceAction>();
+        private List<PieceAction> onMouseActions = new List<PieceAction>();
+
+        internal void UpdateTransformName(object obj)
+        {
+            transform.name = obj.ToString();
+        }
 
         private void OnMouseDown()
         {
-            foreach (var action in OnMouseActions)
+            foreach (var action in onMouseActions)
             {
                 if (action != null)
                     action.Execute(this);
             }
-        }
-
-        // Use this for initialization
-        private void Start()
-        {
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
         }
 
         public Color Color

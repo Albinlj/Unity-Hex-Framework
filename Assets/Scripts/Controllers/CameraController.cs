@@ -11,7 +11,7 @@ namespace Assets.Scripts.Controllers
 
         private void Start()
         {
-            padding = Layout.RadiusInner;
+            padding = 1;
         }
 
         // Update is called once per frame
@@ -21,8 +21,8 @@ namespace Assets.Scripts.Controllers
 
         public void UpdateCamera(int width, int heigth)
         {
-            myCamera.transform.position = new Vector3((width) * Layout.RadiusInner, (heigth + 1.5f) * Layout.RadiusInner, -1);
-            myCamera.orthographicSize = (heigth + .5f) * Layout.RadiusInner + padding;
+            //myCamera.transform.position = new Vector3((width) * Layout.RadiusInner, (heigth + 1.5f) * Layout.RadiusInner, -1);
+            //myCamera.orthographicSize = (heigth + .5f) * Layout.RadiusInner + padding;
             myCamera.ResetAspect();
         }
     }

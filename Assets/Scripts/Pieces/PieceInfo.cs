@@ -1,87 +1,36 @@
 ﻿using Assets.Scripts.Coords;
-using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Pieces
 {
-    public class PieceInfo
+    public class PieceInfo : ScriptableObject
     {
-        private bool isOn;
-
-        public bool IsOn
-        {
-            get => isOn;
-            set => isOn = value;
-        }
-
-        private PieceColor color;
-
-        public PieceColor Color
-        {
-            get => color;
-            set => color = value;
-        }
+        public PieceColor Color { get; set; }
     }
 
-    [Serializable]
-    public class CellInfo : PieceInfo, IInfo
+    //public class PieceInfo<T> : ScriptableObject where T : struct
+    //{
+    //    public T Coord { get; set; }
+    //}
+
+    public class CellInfo : PieceInfo
     {
-        [field: SerializeField]
         public AxialCoord Coord { get; set; }
 
-        public CellInfo(AxialCoord coord)
-        {
-            Coord = coord;
-        }
-
-        public CellInfo()
-        {
-        }
+        public override string ToString() => $"{Coord} / Color:{Color}";
     }
 
-    [Serializable]
-    public class BorderInfo : PieceInfo, IInfo
+    public class BorderInfo : PieceInfo
     {
-        [SerializeField]
-        private BorderCoord coord;
+        public BorderCoord Coord { get; set; }
 
-        public BorderCoord Coord
-        {
-            get => coord;
-            set => coord = value;
-        }
-
-        public BorderInfo(BorderCoord borderCoord)
-        {
-            coord = borderCoord;
-        }
-
-        public BorderInfo(AxialCoord axial, int index)
-        {
-            coord = new BorderCoord(axial, index);
-        }
+        public override string ToString() => $"{Coord} / Color:{Color}";
     }
 
-    [Serializable]
-    public class VertexInfo : PieceInfo, IInfo
+    public class VertexInfo : PieceInfo
     {
-        [SerializeField]
-        private VertexCoord coord;
+        public VertexCoord Coord { get; set; }
 
-        public VertexCoord Coord
-        {
-            get => coord;
-            set => coord = value;
-        }
-
-        public VertexInfo(VertexCoord vertexCoord)
-        {
-            coord = vertexCoord;
-        }
-
-        public VertexInfo(Vector3Int cube, int index)
-        {
-            coord = new VertexCoord((Vector2Int)cube, index);
-        }
+        public override string ToString() => $"{Coord} / Color:{Color}";
     }
 }

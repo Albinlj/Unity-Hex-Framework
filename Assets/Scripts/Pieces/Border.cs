@@ -1,22 +1,13 @@
 ﻿using Assets.Scripts.Coords;
-using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Pieces
 {
     public class Border : Piece
     {
-        //Fields
-        [SerializeField] private BorderInfo info;
-
-        public BorderInfo Info
-        {
-            get => info;
-            set => info = value;
-        }
+        [SerializeField] public BorderInfo Info;
 
         //Event Actions
-        public static event Action<Border> ClickedEvent;
 
         // Use this for initialization
         private void Start()
@@ -24,29 +15,28 @@ namespace Assets.Scripts.Pieces
             Coloring.RandomizeColor(gameObject);
         }
 
+        public BorderCoord Coord
+        {
+            get => Info.Coord;
+            private set => Info.Coord = value;
+        }
+
         private void OnMouseDown()
         {
-            ClickedEvent(this);
         }
 
         public void Initialize(BorderInfo borderInfo)
         {
-            ChangeCoord(borderInfo.Coord);
+            UpdateTransformName(borderInfo);
+            Info = borderInfo;
             UpdatePosition();
         }
 
         private void UpdatePosition()
         {
-            Vector2 position = info.Coord.Axial.ToWorldPosition() + Directions.HexDirections[info.Coord.Index].ToWorldPosition() / 2;
-            Quaternion rotation = Quaternion.AngleAxis(60 - 60 * info.Coord.Index, Vector3.back);
+            Vector2 position = Info.Coord;
+            Quaternion rotation = (Quaternion)Info.Coord;
             transform.SetPositionAndRotation(position, rotation);
-        }
-
-        private void ChangeCoord(BorderCoord newCoord)
-        {
-            info.Coord = newCoord;
-            transform.name = newCoord.ToString();
-            MapController.Instance.UpdateCoordInMap(this);
         }
 
         public bool RotateAround(Piece piece, bool clockwise)
@@ -54,14 +44,14 @@ namespace Assets.Scripts.Pieces
             if (piece is Vertex vertex)
             {
                 var newCoord = Hex.GetBorderCoordRotatedAroundVertex(vertex.Info.Coord, Info.Coord, clockwise);
-                ChangeCoord(newCoord);
+                Info.Coord = newCoord;
                 UpdatePosition();
                 return true;
             }
             else if (piece is Cell cell)
             {
                 var newCoord = Hex.GetBorderCoordRotatedAroundCell(cell.Coord, Info.Coord, clockwise);
-                ChangeCoord(newCoord);
+                Info.Coord = newCoord;
                 UpdatePosition();
                 return true;
             }

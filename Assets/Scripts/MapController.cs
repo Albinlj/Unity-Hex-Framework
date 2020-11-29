@@ -1,10 +1,7 @@
-﻿using Assets.Scripts.Controllers;
-using Assets.Scripts.Coords;
+﻿using Assets.Scripts.Lists;
 using Assets.Scripts.Pieces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -12,23 +9,16 @@ namespace Assets.Scripts
     [Serializable]
     public class MapController : Singleton<MapController>
     {
-        public GameObject cellPrefab;
-        public GameObject borderPrefab;
-        public GameObject vertexPrefab;
         private Transform cellHolder;
         private Transform borderHolder;
         private Transform vertexHolder;
         private Transform poolHolder;
-        private Validator validator;
-        private Pool<Cell> cellPool;
-        private Pool<Border> borderPool;
-        private Pool<Vertex> vertexPool;
 
-        [SerializeField] private Blueprint bluePrint;
+        [SerializeField]
+        private Blueprint loadBlueprint;
 
-        public Map map;
-
-        // Use this for initialization
+        [SerializeField]
+        //private Blueprint saveBlueprint;
 
         private void Start()
         {
@@ -40,87 +30,47 @@ namespace Assets.Scripts
             vertexHolder.SetParent(this.transform);
             poolHolder = new GameObject("poolHolder").transform;
             poolHolder.SetParent(this.transform);
-
-            cellPool = new Pool<Cell>(cellPrefab, poolHolder, cellHolder);
-            borderPool = new Pool<Border>(borderPrefab, poolHolder, borderHolder);
-            vertexPool = new Pool<Vertex>(vertexPrefab, poolHolder, vertexHolder);
         }
+
+        public void Reset()
+        {
+            var pieceList = PieceList.Ins;
+            foreach (var cell in pieceList.Cells)
+                Destroy(cell.Value);
+            foreach (var border in pieceList.Borders)
+                Destroy(border.Value);
+            foreach (var vertex in pieceList.Vertexes)
+                Destroy(vertex.Value);
+
+            pieceList.Cells.Clear();
+            pieceList.Borders.Clear();
+            pieceList.Vertexes.Clear();
+        }
+
+        public void SaveBlueprint(string path = "Resources/Blueprints")
+        {
+            var blueprint = ScriptableObject.CreateInstance<Blueprint>();
+            blueprint.cellInfoList = PieceList.Ins.Cells.Select(p => p.Value.Info).ToList();
+            blueprint.borderInfoList = PieceList.Ins.Borders.Select(p => p.Value.Info).ToList();
+            blueprint.vertexInfoList = PieceList.Ins.Vertexes.Select(p => p.Value.Info).ToList();
+        }
+
+        public void LoadBlueprint() => LoadBlueprint(loadBlueprint);
 
         public void LoadBlueprint(Blueprint blueprint)
         {
-            cellPool.ReleaseAll();
-            borderPool.ReleaseAll();
-            vertexPool.ReleaseAll();
-
-            map = new Map(blueprint.width, blueprint.height);
-            int cellCount = blueprint.width * blueprint.height;
-            cellPool.Populate((blueprint.width - 2) * (blueprint.height - 2));
-            borderPool.Populate(cellCount * 3);
-            vertexPool.Populate((blueprint.width) * (blueprint.height - 2) * 2);
-
             foreach (CellInfo cellInfo in blueprint.cellInfoList)
-            {
-                cellPool.Get().Initialize(cellInfo);
-            }
+                PieceInstantiator.Ins.Instantiate(cellInfo);
             foreach (BorderInfo borderInfo in blueprint.borderInfoList)
-            {
-                borderPool.Get().Initialize(borderInfo);
-            }
+                PieceInstantiator.Ins.Instantiate(borderInfo);
             foreach (VertexInfo vertexInfo in blueprint.vertexInfoList)
-            {
-                vertexPool.Get().Initialize(vertexInfo);
-            }
-            CameraController.Instance.UpdateCamera(blueprint.width - 2, blueprint.height - 2);
+                PieceInstantiator.Ins.Instantiate(vertexInfo);
         }
 
-        public void SaveBlueprint()
+        public void InstantiateRectangularMap(int width, int height)
         {
-            bluePrint.cellInfoList = cellPool.usedList.Select(c => c.Info).ToList();
-            bluePrint.borderInfoList = borderPool.usedList.Select(b => b.Info).ToList();
-            bluePrint.vertexInfoList = vertexPool.usedList.Select(v => v.Info).ToList();
-
-            EditorUtility.SetDirty(bluePrint);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        private Cell GetCell(OffsetCoord offset)
-        {
-            return validator.IsValidCoord(offset)
-                ? map.cells[offset.X, offset.Y]
-                : null;
-        }
-
-        public List<Cell> GetCells(List<OffsetCoord> list) => list.Select(GetCell).ToList();
-
-        public Border GetBorder(BorderCoord borderCoord)
-        {
-            return map.borders[
-                ((OffsetCoord)borderCoord.Axial).X,
-                ((OffsetCoord)borderCoord.Axial).Y
-            ][
-                borderCoord.Index
-            ];
-        }
-
-        public List<Border> GetBorders(IEnumerable<BorderCoord> borderCoordList) => borderCoordList.Select(GetBorder).ToList();
-
-        public void UpdateCoordInMap(Cell cell)
-        {
-            OffsetCoord offsetCoord = cell.Coord;
-            map.cells[offsetCoord.X, offsetCoord.Y] = cell;
-        }
-
-        public void UpdateCoordInMap(Border border)
-        {
-            OffsetCoord offsetCoord = border.Info.Coord.Axial;
-            map.borders[offsetCoord.X, offsetCoord.Y][border.Info.Coord.Index] = border;
-        }
-
-        public void UpdateCoordInMap(Vertex vertex)
-        {
-            OffsetCoord offsetCoord = vertex.Info.Coord.Axial;
-            map.vertices[offsetCoord.X, offsetCoord.Y][vertex.Info.Coord.Index] = vertex;
+            var blueprint = BlueprintCreation.CreateRectangularBlueprint(width, height);
+            LoadBlueprint(blueprint);
         }
     }
 }

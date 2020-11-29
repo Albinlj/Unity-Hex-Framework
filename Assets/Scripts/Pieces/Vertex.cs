@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using Assets.Scripts.Coords;
+using Assets.Scripts.Lists;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Pieces
@@ -8,25 +9,32 @@ namespace Assets.Scripts.Pieces
     {
         public VertexInfo Info { get; set; }
 
-        public IEnumerable<Border> Borders => MapController.Instance.GetBorders(Info.Coord.Borders.ToList());
+        public IEnumerable<Border> Borders => PieceList.Ins.Borders.TryGetMany(Info.Coord.Borders);
 
         private void Start() => Coloring.RandomizeColor(this.gameObject);
 
-        public void Initialize(VertexInfo newInfo)
+        public VertexCoord Coord
         {
-            ChangeCoord(newInfo);
-            UpdatePosition();
+            get => Info.Coord;
+            private set => Info.Coord = value;
         }
 
-        private void UpdatePosition() => transform.position = Info.Coord.Axial.ToWorldPosition() + new Vector2(0.5f - Info.Coord.Index, 0);
+        public void Initialize(VertexInfo newInfo)
+        {
+            Info = newInfo;
+            UpdatePosition();
+            UpdateTransformName(newInfo);
+        }
+
+        private void UpdatePosition() => transform.position = (Vector2)Info.Coord;
 
         private void ChangeCoord(VertexInfo vertexInfo)
         {
-            //var newCoord = vertexInfo.Coord;
-            //Info.Coord = newCoord;
-            Info = vertexInfo;
-            transform.name = $"Vertex {Info}";
-            MapController.Instance.UpdateCoordInMap(this);
+            ////var newCoord = vertexInfo.Coord;
+            ////Info.Coord = newCoord;
+            //Info = vertexInfo;
+            //transform.name = $"Vertex {Info}";
+            //MapController.Instance.UpdateCoordInMap(this);
         }
     }
 }

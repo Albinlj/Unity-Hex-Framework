@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Coords;
+using Assets.Scripts.Lists;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,13 +7,8 @@ namespace Assets.Scripts.Pieces
 {
     public class Cell : Piece
     {
-        [SerializeField] private CellInfo info;
-
-        public CellInfo Info
-        {
-            get => info;
-            set => info = value;
-        }
+        [SerializeField]
+        public CellInfo Info { get; set; }
 
         private PolygonCollider2D polyCollider;
 
@@ -20,11 +16,9 @@ namespace Assets.Scripts.Pieces
 
         public AxialCoord Coord
         {
-            get => info.Coord;
-            private set => info.Coord = value;
+            get => Info.Coord;
+            private set => Info.Coord = value;
         }
-
-        public IEnumerable<Border> Borders => MapController.Instance.GetBorders(info.Coord.Borders);
 
         private void Start()
         {
@@ -32,18 +26,27 @@ namespace Assets.Scripts.Pieces
             polyCollider = gameObject.GetComponent<PolygonCollider2D>();
         }
 
-        public void Initialize(CellInfo cellInfo)
+        public void OnEnable()
         {
-            ChangeCoord(cellInfo);
-            UpdatePosition(cellInfo);
+            //MonoDictionary<AxialCoord, Cell>.Ins.Items.Add(Info.Coord, this);
+            //UpdatePosition(Info);
         }
 
-        private void UpdatePosition(CellInfo cellInfo) => transform.position = cellInfo.Coord.ToWorldPosition();
+        public void Initialize(CellInfo info)
+        {
+            Info = info;
+            PieceList.Ins.Cells.Add(Info.Coord, this);
+            UpdatePosition(Info);
+            UpdateTransformName(info);
+        }
+
+        public IEnumerable<Border> Borders => PieceList.Ins.Borders.TryGetMany(Info.Coord.Borders);
+
+        private void UpdatePosition(CellInfo cellInfo) => transform.position = (Vector2)cellInfo.Coord;
 
         private void ChangeCoord(CellInfo cellInfo)
         {
-            info = cellInfo;
-            MapController.Instance.UpdateCoordInMap(this);
+            Info = cellInfo;
         }
     }
 }
